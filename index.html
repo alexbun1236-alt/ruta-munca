@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Ruta Merch">
+  <title>Ruta Merchandiser iPhone</title>
+  
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <style>
+    :root {
+      --safe-top: env(safe-area-inset-top, 44px);
+      --safe-bottom: env(safe-area-inset-bottom, 34px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+      --ios-blue: #007aff;
+      --ios-green: #34c759;
+      --ios-red: #ff3b30;
+      --ios-bg-card: rgba(255, 255, 255, 0.92);
+      --ios-card-border: rgba(0, 0, 0, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body, html {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background: #000000;
+      position: fixed;
+    }
+
+    #app-container {
+      display: flex;
+      flex-direction: column;
+      height: 100dvh;
+      width: 100vw;
+      position: relative;
+      background: #f2f2f7;
+    }
+
+    /* Map fills screen behind overlays */
+    #map {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    /* Top Floating Island (Below Dynamic Island) */
+    .top-glass-bar {
+      position: absolute;
+      top: calc(var(--safe-top) + 6px);
+      left: 14px;
+      right: 14px;
+      z-index: 1000;
+      background: rgba(28, 28, 30, 0.88);
+      -webkit-backdrop-filter: blur(25px);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 12px 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .top-bar-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .app-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+    }
+
+    .app-subtitle {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: #a1a1aa;
+    }
+
+    .btn-sheet-open {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: background 0.15s ease;
+    }
+    .btn-sheet-open:active {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--ios-green);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Bottom Floating Action Card (Above Home Indicator) */
+    .bottom-glass-card {
+      position: absolute;
+      bottom: calc(var(--safe-bottom) + 8px);
+      left: 14px;
+      right: 14px;
+      z-index: 1000;
+      background: var(--ios-bg-card);
+      -webkit-backdrop-filter: blur(25px);
+      backdrop-filter: blur(25px);
+      border: 1px solid var(--ios-card-border);
+      border-radius: 26px;
+      padding: 16px 18px 14px 18px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.22);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card-main-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .store-num-badge {
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      border-radius: 14px;
+      background: #1c1c1e;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .store-num-badge.resolved {
+      background: var(--ios-green);
+    }
+    .store-num-badge.unresolved {
+      background: var(--ios-red);
+    }
+
+    .store-text-box {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .store-name-text {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #000000;
+      letter-spacing: -0.4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .store-addr-text {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #636366;
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Main Big Waze Button */
+    .btn-waze-hero {
+      background: var(--ios-blue);
+      color: #ffffff;
+      border: none;
+      border-radius: 16px;
+      padding: 15px 16px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 6px 18px rgba(0, 122, 255, 0.35);
+      cursor: pointer;
+      transition: transform 0.1s ease, background 0.15s ease;
+    }
+    .btn-waze-hero:active {
+      transform: scale(0.97);
+      background: #0062cc;
+    }
+
+    /* Action Buttons Row */
+    .actions-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-action-ios {
+      border: none;
+      border-radius: 12px;
+      padding: 11px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.1s ease;
+    }
+    .btn-action-ios:active {
+      transform: scale(0.96);
+    }
+    .btn-resolved-style {
+      background: rgba(52, 199, 89, 0.15);
+      color: #248a3d;
+    }
+    .btn-unresolved-style {
+      background: rgba(255, 59, 48, 0.15);
+      color: #c92a20;
+    }
+
+    /* iOS Bottom Sheet Modal */
+    #ios-sheet-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      justify-content: flex-end;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    #ios-sheet-overlay.open {
+      display: flex;
+      opacity: 1;
+    }
+
+    .sheet-modal {
+      background: #f2f2f7;
+      border-radius: 28px 28px 0 0;
+      max-height: 82dvh;
+      display: flex;
+      flex-direction: column;
+      padding: 12px 16px calc(var(--safe-bottom) + 12px) 16px;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+    #ios-sheet-overlay.open .sheet-modal {
+      transform: translateY(0);
+    }
+
+    .sheet-grabber {
+      width: 38px;
+      height: 5px;
+      background: #c7c7cc;
+      border-radius: 3px;
+      align-self: center;
+      margin-bottom: 12px;
+    }
+
+    .sheet-top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 10px;
+      margin-bottom: 8px;
+    }
+
+    .sheet-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #000000;
+    }
+
+    .btn-sheet-close {
+      background: #e5e5ea;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #636366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .sheet-list-scroll {
+      overflow-y: auto;
+      flex: 1;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-bottom: 12px;
+    }
+
+    .sheet-item {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      cursor: pointer;
+    }
+    .sheet-item.current {
+      border: 2px solid var(--ios-blue);
+      background: #eef7ff;
+    }
+    .sheet-item.done {
+      border-color: rgba(52, 199, 89, 0.3);
+      background: #f4fbf6;
+    }
+    .sheet-item.fail {
+      border-color: rgba(255, 59, 48, 0.3);
+      background: #fdf5f5;
+    }
+
+    .sheet-item-num {
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      background: #1c1c1e;
+      color: white;
+      font-size: 0.82rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sheet-item.done .sheet-item-num { background: var(--ios-green); }
+    .sheet-item.fail .sheet-item-num { background: var(--ios-red); }
+
+    /* Map Custom Marker Icons */
+    .custom-marker-ios {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 13px;
+      border-radius: 50%;
+      border: 2.5px solid #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+      transition: transform 0.2s ease;
+    }
+    .pin-normal { background-color: var(--ios-blue); }
+    .pin-selected { background-color: #ff9500; transform: scale(1.2); border-color: #000000; }
+    .pin-done { background-color: var(--ios-green); }
+    .pin-fail { background-color: var(--ios-red); }
+  </style>
+</head>
+<body>
+
+  <div id="app-container">
+    
+    <!-- Top Glass Header (Safe-Area Aware) -->
+    <div class="top-glass-bar">
+      <div class="top-bar-row">
+        <div>
+          <div class="app-title">Traseu Merchandiser</div>
+          <div class="app-subtitle" id="progress-text">Progres: 0 / 20 bifate</div>
+        </div>
+        <button class="btn-sheet-open" onclick="openSheet()">
+          <span>📋</span>
+          <span>Lista (20)</span>
+        </button>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Map Fullscreen -->
+    <div id="map"></div>
+
+    <!-- Bottom Action Card (Safe-Area Aware) -->
+    <div class="bottom-glass-card">
+      <div class="card-main-info" onclick="openSheet()">
+        <div class="store-num-badge" id="badge-current">1</div>
+        <div class="store-text-box">
+          <div class="store-name-text" id="name-current">Penny Timpuri Noi</div>
+          <div class="store-addr-text" id="addr-current">V.V.Stanciu 213, Sector 4</div>
+        </div>
+      </div>
+
+      <!-- Hero Waze Navigation Button -->
+      <button class="btn-waze-hero" onclick="handleGoNextWaze()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12c0 2.17.7 4.19 1.94 5.84L3 22l4.34-.91C8.89 21.64 10.4 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm1 14.5h-2v-2h2v2zm0-4h-2V7h2v5.5z"/>
+        </svg>
+        <span>Mergi la următoarea adresă (Waze)</span>
+      </button>
+
+      <!-- Status Buttons -->
+      <div class="actions-row">
+        <button class="btn-action-ios btn-resolved-style" onclick="setStoreStatus('resolved')">✓ Rezolvat</button>
+        <button class="btn-action-ios btn-unresolved-style" onclick="setStoreStatus('unresolved')">✗ Nerezolvat</button>
+      </div>
+    </div>
+
+    <!-- iOS Bottom Sheet (Store List) -->
+    <div id="ios-sheet-overlay" onclick="closeSheet(event)">
+      <div class="sheet-modal" onclick="event.stopPropagation()">
+        <div class="sheet-grabber"></div>
+        <div class="sheet-top-header">
+          <div class="sheet-title">Toate cele 20 de magazine</div>
+          <button class="btn-sheet-close" onclick="closeSheet()">✕</button>
+        </div>
+        
+        <div class="sheet-list-scroll" id="sheet-list-container"></div>
+
+        <button style="margin-top:8px; border:none; background:#ffffff; padding:12px; border-radius:14px; font-weight:700; color:#ff3b30; font-size:0.85rem;" onclick="resetDay()">
+          🔄 Resetează Ziua de Lucru
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const stores = [
+      { id: 1, name: "Penny Timpuri Noi", address: "V.V.Stanciu 213, Sector 4", lat: 44.4140, lon: 26.1180, status: "pending" },
+      { id: 2, name: "Mega Image Tineretului", address: "Bd Tineretului 1, Sector 4", lat: 44.4132, lon: 26.1055, status: "pending" },
+      { id: 3, name: "Mega Image City Mall", address: "Sos oltenitei 2, Sector 4", lat: 44.4022, lon: 26.0965, status: "pending" },
+      { id: 4, name: "Mega Image Giurgiului 2", address: "Sos .Giurgiului 54, Sector 4", lat: 44.3942, lon: 26.0908, status: "pending" },
+      { id: 5, name: "Mega Image Progresului", address: "Sos .Giurgiului 113-115, Sector 4", lat: 44.3855, lon: 26.0888, status: "pending" },
+      { id: 6, name: "Penny Luica", address: "Luica 23, Sector 4", lat: 44.3802, lon: 26.0955, status: "pending" },
+      { id: 7, name: "Mega Image Huedin", address: "Grădiștea 8, Sector 4", lat: 44.3831, lon: 26.1070, status: "pending" },
+      { id: 8, name: "Mega Image Brâncoveanu", address: "BL.Cinstantin Brancoveanu 45, Sector 4", lat: 44.3930, lon: 26.1060, status: "pending" },
+      { id: 9, name: "Mega Image Împăratul Traian", address: "Imparatul traian 32, Sector 4", lat: 44.3985, lon: 26.1045, status: "pending" },
+      { id: 10, name: "Penny Nițu Vasile", address: "Nitu Vasilescu 9, Sector 4", lat: 44.3965, lon: 26.1150, status: "pending" },
+      { id: 11, name: "Mega Image Piața Sudului", address: "Sos oltenitei 208, Sector 4", lat: 44.3925, lon: 26.1240, status: "pending" },
+      { id: 12, name: "Mega Image Obregia", address: "Bulevardul Alexandru obregia 25, Sector 4", lat: 44.3860, lon: 26.1185, status: "pending" },
+      { id: 13, name: "Mega Image Berceni", address: "Sos.Berceni 41, Sector 4", lat: 44.3815, lon: 26.1330, status: "pending" },
+      { id: 14, name: "Mega Image Monaco Towers", address: "Sos.berceni 96, Sector 4", lat: 44.3685, lon: 26.1435, status: "pending" },
+      { id: 15, name: "Penny Leonida", address: "Sos.Berceni,Popesti-Leordeni 9, Popești Leordeni", lat: 44.3638, lon: 26.1465, status: "pending" },
+      { id: 16, name: "Mega Image Biruinței 3", address: "Biruintei 47, Popești Leordeni", lat: 44.3650, lon: 26.1520, status: "pending" },
+      { id: 17, name: "Mega Image Drumul Binelui", address: "Drumul fermei 35, Popești Leordeni", lat: 44.3705, lon: 26.1550, status: "pending" },
+      { id: 18, name: "Mega Image Amurgului", address: "Oituz 46, Popești Leordeni", lat: 44.3765, lon: 26.1585, status: "pending" },
+      { id: 19, name: "Mega Image Popești Leordeni 2", address: "Sos oltenitei 18-20, Popești Leordeni", lat: 44.3820, lon: 26.1645, status: "pending" },
+      { id: 20, name: "Mega Image Popești Leordeni", address: "Sos.oltenitei 51A-55, Popești Leordeni", lat: 44.3780, lon: 26.1730, status: "pending" }
+    ];
+
+    let currentIndex = 0;
+    const saved = JSON.parse(localStorage.getItem("ios_merch_route_state") || "{}");
+    if (saved.statuses) {
+      stores.forEach((s, i) => { if (saved.statuses[i]) s.status = saved.statuses[i]; });
+    }
+    if (typeof saved.currentIndex === 'number' && saved.currentIndex < stores.length) {
+      currentIndex = saved.currentIndex;
+    }
+
+    // Initialize Map with iOS touch options
+    const map = L.map('map', { 
+      zoomControl: false, 
+      attributionControl: false,
+      tap: true 
+    }).setView([stores[currentIndex].lat, stores[currentIndex].lon], 15);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19
+    }).addTo(map);
+
+    // Route line
+    const coords = stores.map(s => [s.lat, s.lon]);
+    L.polyline(coords, {
+      color: '#007aff',
+      weight: 4,
+      opacity: 0.65,
+      dashArray: '6, 6'
+    }).addTo(map);
+
+    const markers = [];
+
+    function getPinIcon(index) {
+      const store = stores[index];
+      let pinClass = "pin-normal";
+      let text = index + 1;
+
+      if (store.status === "resolved") {
+        pinClass = "pin-done";
+        text = "✓";
+      } else if (store.status === "unresolved") {
+        pinClass = "pin-fail";
+        text = "✗";
+      } else if (index === currentIndex) {
+        pinClass = "pin-selected";
+      }
+
+      return L.divIcon({
+        className: 'custom-icon',
+        html: `<div class="custom-marker-ios ${pinClass}" style="width:32px; height:32px;">${text}</div>`,
+        iconSize: [32, 32],
+        iconAnchor: [16, 16]
+      });
+    }
+
+    stores.forEach((store, idx) => {
+      const m = L.marker([store.lat, store.lon], { icon: getPinIcon(idx) }).addTo(map);
+      m.on('click', () => selectStore(idx));
+      markers.push(m);
+    });
+
+    function selectStore(index) {
+      currentIndex = index;
+      updateUI();
+      map.flyTo([stores[index].lat, stores[index].lon], 15, { duration: 0.6 });
+    }
+
+    // Deep link optimized for iOS Waze app
+    function launchWaze(lat, lon) {
+      const iosWazeAppUrl = `waze://?ll=${lat},${lon}&navigate=yes`;
+      const fallbackUrl = `https://waze.com/ul?ll=${lat},${lon}&navigate=yes`;
+
+      window.location.href = iosWazeAppUrl;
+
+      // Fallback if Waze is not installed
+      setTimeout(() => {
+        if (!document.hidden) {
+          window.location.href = fallbackUrl;
+        }
+      }, 1200);
+    }
+
+    function handleGoNextWaze() {
+      // 1. Mark current as resolved if it was pending
+      if (stores[currentIndex].status === 'pending') {
+        stores[currentIndex].status = 'resolved';
+      }
+
+      const nextIndex = currentIndex + 1;
+      if (nextIndex < stores.length) {
+        selectStore(nextIndex);
+        saveState();
+        launchWaze(stores[nextIndex].lat, stores[nextIndex].lon);
+      } else {
+        updateUI();
+        saveState();
+        alert("🎉 Felicitări! Ai terminat toate cele 20 de magazine. De aici din Popești-Leordeni ai acces direct spre casă în Brănești via DNCB / A2.");
+      }
+    }
+
+    function setStoreStatus(status) {
+      stores[currentIndex].status = status;
+      updateUI();
+      saveState();
+    }
+
+    function updateUI() {
+      const curr = stores[currentIndex];
+
+      // Update Card
+      document.getElementById('name-current').innerText = `${curr.id}. ${curr.name}`;
+      document.getElementById('addr-current').innerText = curr.address;
+
+      const badge = document.getElementById('badge-current');
+      badge.className = `store-num-badge ${curr.status}`;
+      badge.innerText = curr.status === 'resolved' ? '✓' : (curr.status === 'unresolved' ? '✗' : curr.id);
+
+      // Refresh Marker Icons
+      markers.forEach((m, idx) => m.setIcon(getPinIcon(idx)));
+
+      // Progress Calculation
+      const doneCount = stores.filter(s => s.status === 'resolved').length;
+      const pct = Math.round((doneCount / stores.length) * 100);
+      document.getElementById('progress-fill').style.width = `${pct}%`;
+      document.getElementById('progress-text').innerText = `Progres: ${doneCount} / ${stores.length} (${pct}%)`;
+
+      renderSheetItems();
+    }
+
+    function renderSheetItems() {
+      const container = document.getElementById('sheet-list-container');
+      container.innerHTML = '';
+
+      stores.forEach((st, idx) => {
+        const item = document.createElement('div');
+        let stateClass = st.status === 'resolved' ? 'done' : (st.status === 'unresolved' ? 'fail' : '');
+        if (idx === currentIndex) stateClass += ' current';
+
+        item.className = `sheet-item ${stateClass}`;
+        item.onclick = () => {
+          selectStore(idx);
+          closeSheet();
+        };
+
+        const iconText = st.status === 'resolved' ? '✓' : (st.status === 'unresolved' ? '✗' : st.id);
+
+        item.innerHTML = `
+          <div class="sheet-item-num">${iconText}</div>
+          <div style="flex:1; overflow:hidden;">
+            <div style="font-weight:700; font-size:0.9rem; color:#000000; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${st.id}. ${st.name}</div>
+            <div style="font-size:0.75rem; color:#8e8e93; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${st.address}</div>
+          </div>
+          <button style="border:none; background:rgba(0,122,255,0.12); color:#007aff; padding:6px 12px; border-radius:10px; font-weight:700; font-size:0.78rem;" onclick="event.stopPropagation(); launchWaze(${st.lat}, ${st.lon})">Waze</button>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function openSheet() {
+      document.getElementById('ios-sheet-overlay').classList.add('open');
+    }
+
+    function closeSheet(e) {
+      if (!e || e.target.id === 'ios-sheet-overlay' || e.target.classList.contains('btn-sheet-close')) {
+        document.getElementById('ios-sheet-overlay').classList.remove('open');
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem("ios_merch_route_state", JSON.stringify({
+        statuses: stores.map(s => s.status),
+        currentIndex: currentIndex
+      }));
+    }
+
+    function resetDay() {
+      if (confirm("Resetezi ziua de lucru și toate magazinele?")) {
+        stores.forEach(s => s.status = 'pending');
+        currentIndex = 0;
+        localStorage.removeItem("ios_merch_route_state");
+        selectStore(0);
+        closeSheet();
+      }
+    }
+
+    // Initial load
+    updateUI();
+  </script>
+</body>
+</html>
