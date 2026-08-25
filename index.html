@@ -25,6 +25,8 @@
       --danger-light: #fee2e2;
       --warning: #f59e0b;
       --warning-light: #fef3c7;
+      --purple: #8b5cf6;
+      --purple-light: #ede9fe;
       --gray-50: #f8fafc;
       --gray-100: #f1f5f9;
       --gray-200: #e2e8f0;
@@ -59,6 +61,7 @@
       --primary-light: #1e3a8a;
       --success-light: #064e3b;
       --danger-light: #7f1d1d;
+      --purple-light: #4c1d95;
     }
 
     * {
@@ -83,12 +86,13 @@
     header {
       background-color: var(--card-bg);
       border-bottom: 1px solid var(--border);
-      padding: 8px 16px;
+      padding: 8px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       z-index: 1000;
       flex-shrink: 0;
+      gap: 8px;
     }
 
     .brand {
@@ -123,26 +127,57 @@
       display: block;
     }
 
+    /* Day Switcher Component */
+    .day-selector-container {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background-color: var(--gray-100);
+      padding: 3px;
+      border-radius: 10px;
+    }
+
+    .day-btn {
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 7px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+
+    .day-btn.active {
+      background-color: var(--primary);
+      color: white;
+      box-shadow: 0 2px 5px rgba(37,99,235,0.3);
+    }
+
     .nav-tabs {
       display: flex;
-      gap: 6px;
+      gap: 4px;
       background-color: var(--gray-100);
-      padding: 4px;
+      padding: 3px;
       border-radius: 10px;
     }
 
     .nav-tab {
-      padding: 8px 14px;
-      font-size: 13px;
+      padding: 7px 12px;
+      font-size: 12px;
       font-weight: 600;
       border: none;
       background: transparent;
       color: var(--text-muted);
-      border-radius: 8px;
+      border-radius: 7px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       transition: all 0.2s;
     }
 
@@ -155,12 +190,12 @@
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .icon-btn {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       border-radius: 8px;
       border: 1px solid var(--border);
       background-color: var(--card-bg);
@@ -169,7 +204,7 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 15px;
     }
 
     .badge {
@@ -184,6 +219,7 @@
     .badge-success { background: var(--success-light); color: var(--success); }
     .badge-danger { background: var(--danger-light); color: var(--danger); }
     .badge-gray { background: var(--gray-100); color: var(--text-muted); }
+    .badge-purple { background: var(--purple-light); color: var(--purple); }
 
     /* Main Container */
     main {
@@ -232,22 +268,22 @@
     }
 
     .sidebar-header {
-      padding: 16px;
+      padding: 14px 16px;
       border-bottom: 1px solid var(--border);
     }
 
     .sidebar-header h2 {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .route-info-box {
       background: var(--gray-50);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 12px;
+      padding: 9px 11px;
+      font-size: 11px;
       line-height: 1.4;
       margin-top: 8px;
     }
@@ -259,6 +295,7 @@
       padding-top: 6px;
       border-top: 1px dashed var(--border);
       font-weight: 600;
+      font-size: 11px;
     }
 
     .store-list-container {
@@ -274,11 +311,11 @@
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 12px;
+      padding: 11px 12px;
       cursor: pointer;
       transition: all 0.2s;
       display: flex;
-      gap: 12px;
+      gap: 10px;
       align-items: flex-start;
       position: relative;
     }
@@ -294,13 +331,13 @@
     }
 
     .store-card-num {
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       background: var(--gray-100);
       color: var(--text);
       font-weight: 700;
-      font-size: 12px;
+      font-size: 11px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -345,7 +382,7 @@
       right: 12px;
       background: var(--card-bg);
       border-radius: 16px;
-      padding: 16px;
+      padding: 14px 16px;
       box-shadow: var(--shadow-lg);
       border: 1px solid var(--border);
       z-index: 999;
@@ -376,7 +413,7 @@
       width: 100%;
       max-width: 500px;
       border-radius: 20px 20px 0 0;
-      padding: 20px 20px 30px 20px;
+      padding: 18px 20px 28px 20px;
       box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
       animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       max-height: 85vh;
@@ -393,7 +430,7 @@
       height: 5px;
       background: var(--gray-300);
       border-radius: 3px;
-      margin: 0 auto 16px auto;
+      margin: 0 auto 14px auto;
     }
 
     .sheet-header {
@@ -404,13 +441,13 @@
     }
 
     .sheet-title {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 700;
       line-height: 1.3;
     }
 
     .sheet-address {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-muted);
       margin-top: 4px;
       display: flex;
@@ -422,7 +459,7 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-top: 16px;
+      margin-top: 14px;
     }
 
     .btn-group-horizontal {
@@ -461,10 +498,7 @@
       font-size: 15px;
       box-shadow: 0 4px 10px rgba(0, 198, 255, 0.3);
     }
-
-    .btn-waze:hover {
-      opacity: 0.95;
-    }
+    .btn-waze:hover { opacity: 0.95; }
 
     .btn-secondary {
       background: var(--gray-100);
@@ -494,7 +528,7 @@
       border-radius: 8px;
     }
 
-    /* Floating Bubble (Messenger Style FAB) with Free Dragging */
+    /* Floating Messenger Bubble FAB - Draggable Anywhere */
     .floating-fab {
       position: fixed;
       bottom: 100px;
@@ -540,7 +574,7 @@
       pointer-events: none;
     }
 
-    /* Floating Window / Messenger Card */
+    /* Floating Window / Messenger Form */
     .fab-window {
       position: fixed;
       bottom: 90px;
@@ -575,7 +609,6 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      cursor: move;
     }
 
     .fab-window-header h3 {
@@ -690,17 +723,17 @@
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 20px;
+      padding: 18px 20px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 14px;
       box-shadow: var(--shadow);
     }
 
     .report-title-box h2 {
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 800;
     }
 
@@ -910,7 +943,8 @@
         display: block;
       }
       header {
-        padding: 8px 12px;
+        padding: 6px 10px;
+        flex-wrap: wrap;
       }
       .brand-info span {
         display: none;
@@ -1002,25 +1036,37 @@
     </div>
   </div>
 
-  <!-- Header / Navigation Bar -->
+  <!-- Header / Navigation Bar with Day Selector -->
   <header>
     <div class="brand">
       <div class="brand-logo">M</div>
       <div class="brand-info">
         <h1>Merchandiser Pro</h1>
-        <span id="routeOriginStatus">Start: Brănești (A2) → Sector 4 & Popești</span>
+        <span id="routeOriginStatus">Start: Brănești (A2)</span>
       </div>
     </div>
 
-    <div class="nav-tabs">
-      <button class="nav-tab active" id="tabMapBtn" onclick="app.switchTab('map')">
-        🗺️ <span>Traseu & Hartă</span>
+    <!-- Day Selector Pills -->
+    <div class="day-selector-container">
+      <button class="day-btn active" id="btnDay1" onclick="app.switchDay('day1')">
+        📅 Ziua 1 (20 Mag)
       </button>
-      <button class="nav-tab" id="tabReportBtn" onclick="app.switchTab('report')">
-        📋 <span>Raport Verificare Teren</span>
+      <button class="day-btn" id="btnDay2" onclick="app.switchDay('day2')">
+        📅 Ziua 2 (19 Mag)
       </button>
     </div>
 
+    <!-- View Tabs -->
+    <div class="nav-tabs">
+      <button class="nav-tab active" id="tabMapBtn" onclick="app.switchTab('map')">
+        🗺️ <span>Hartă</span>
+      </button>
+      <button class="nav-tab" id="tabReportBtn" onclick="app.switchTab('report')">
+        📋 <span>Raport</span>
+      </button>
+    </div>
+
+    <!-- Actions -->
     <div class="header-actions">
       <button class="icon-btn" title="Schimbă mod Telefon / Desktop" onclick="app.showModePicker()">📱</button>
       <button class="icon-btn" id="themeToggleBtn" title="Temă Luminoasă / Întunecată" onclick="app.toggleTheme()">🌙</button>
@@ -1035,29 +1081,24 @@
       <aside class="map-sidebar" id="mapSidebar">
         <div class="sidebar-header">
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h2>Magazine pe Traseu</h2>
+            <h2 id="sidebarTitle">Magazine Ziua 1</h2>
             <span class="badge badge-primary" id="sidebarProgressBadge">0/20 Vizitate</span>
           </div>
-          <div class="route-info-box">
-            <div>🛣️ <strong>Ruta Optimizată:</strong> Plecare din <strong>Brănești pe A2</strong>, vizitare Popești $
-ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil pe Splai / A2 spre casă).</div>
-            <div class="route-stats-row">
-              <span id="totalDistanceLabel">Distanță Traseu: ~19.2 km</span>
-              <span id="totalTimeEstimateLabel">Timp condus: ~40-50 min</span>
-            </div>
+          <div class="route-info-box" id="sidebarRouteDesc">
+            <!-- Dynamic route description based on selected day -->
           </div>
           <div style="display: flex; gap: 6px; margin-top: 10px;">
-            <button class="btn btn-secondary btn-sm" style="flex:1;" onclick="app.reorderRoute('start-popesti')">
-              🔄 Tur (Start Popești)
+            <button class="btn btn-secondary btn-sm" style="flex:1;" onclick="app.reorderRoute('tur')">
+              🔄 Ordine Tur (Optimă)
             </button>
-            <button class="btn btn-secondary btn-sm" style="flex:1;" onclick="app.reorderRoute('start-timpuri')">
-              🔄 Retur (Start T. Noi)
+            <button class="btn btn-secondary btn-sm" style="flex:1;" onclick="app.reorderRoute('retur')">
+              🔄 Inversare Traseu
             </button>
           </div>
         </div>
 
         <div class="store-list-container" id="storeListContainer">
-          <!-- Populated by JavaScript -->
+          <!-- Populated dynamically -->
         </div>
       </aside>
 
@@ -1068,7 +1109,7 @@ ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil
       <div class="mobile-quick-card" id="mobileQuickCard">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
           <div>
-            <div style="font-size: 11px; font-weight: 700; color: var(--primary);" id="mqcOrder">OPRIREA 1 DIN 20</div>
+            <div style="font-size: 11px; font-weight: 700; color: var(--primary);" id="mqcOrder">OPRIREA 1</div>
             <div style="font-size: 15px; font-weight: 800;" id="mqcName">Selectează un magazin</div>
             <div style="font-size: 12px; color: var(--text-muted);" id="mqcAddress">Apasă pe un pin pe hartă</div>
           </div>
@@ -1100,8 +1141,8 @@ ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil
       <div class="report-container">
         <div class="report-header">
           <div class="report-title-box">
-            <h2>📋 Raport Verificare Teren</h2>
-            <p>Monitorizare status vizite, prețuri la raft, promoții și fotografii realizate pe teren.</p>
+            <h2 id="reportMainHeading">📋 Raport Verificare Teren - Ziua 1</h2>
+            <p id="reportSubHeading">Monitorizare status vizite, prețuri la raft, promoții și fotografii pe teren.</p>
           </div>
           <div class="report-actions">
             <button class="btn btn-primary" onclick="app.copyWhatsAppReport()">
@@ -1114,7 +1155,7 @@ ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil
               🖨️ Tipărește Raport
             </button>
             <button class="btn btn-danger btn-sm" onclick="app.resetDayProgress()">
-              🔄 Resetează Ziua
+              🔄 Resetează Ziua Curentă
             </button>
           </div>
         </div>
@@ -1260,7 +1301,7 @@ ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil
     </div>
   </div>
 
-  <!-- Action Sheet / Store Details Modal (Mobile Click or Pin Click) -->
+  <!-- Action Sheet / Store Details Modal -->
   <div class="modal-overlay" id="storeModalOverlay" onclick="if(event.target === this) app.closeStoreModal()">
     <div class="action-sheet">
       <div class="sheet-handle"></div>
@@ -1326,36 +1367,60 @@ ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil
   <script>
     /**
      * MERCHANDISER PRO APPLICATION
-     * High-precision coordinates calibrated for Bucharest Sector 4 & Popești-Leordeni.
-     * Fully draggable Messenger-style bubble on both Touch and Mouse devices.
+     * Multi-day support: Ziua 1 (Sector 4 & Popești) & Ziua 2 (Ilfov Sud-Vest & Sector 5)
+     * High-precision coordinates + Waze navigation + Draggable Messenger FAB.
      */
     
-    // PRECISE COORDINATES FOR ALL 20 STORES FROM "Ruta Alexandru(Sheet3).csv"
-    const EXACT_STORES = [
-      { id: "loc_1", name: "Mega Image Popești-Leordeni", city: "Popești-Leordeni", county: "Ilfov", address: "Șos. Olteniței 51A-55, Popești-Leordeni", lat: 44.3802, lng: 26.1685, order: 1 },
-      { id: "loc_2", name: "Mega Image Popești-Leordeni 2", city: "Popești-Leordeni", county: "Ilfov", address: "Șos. Olteniței 18-20, Popești-Leordeni", lat: 44.3887, lng: 26.1542, order: 2 },
-      { id: "loc_3", name: "Mega Image Drumul Binelui", city: "Popești-Leordeni", county: "Ilfov", address: "Str. Drumul Fermei 35, Popești-Leordeni", lat: 44.3739, lng: 26.1498, order: 3 },
-      { id: "loc_4", name: "Mega Image Biruinței 3", city: "Popești-Leordeni", county: "Ilfov", address: "Str. Biruinței 47, Popești-Leordeni", lat: 44.3688, lng: 26.1472, order: 4 },
-      { id: "loc_5", name: "Mega Image Amurgului", city: "Popești-Leordeni", county: "Ilfov", address: "Str. Oituz 46, Popești-Leordeni", lat: 44.3724, lng: 26.1420, order: 5 },
-      { id: "loc_6", name: "Mega Image Monaco Towers", city: "Sector 4", county: "București", address: "Șos. Berceni 96, Sector 4", lat: 44.3765, lng: 26.1394, order: 6 },
-      { id: "loc_7", name: "Penny Leonida", city: "Popești-Leordeni", county: "Ilfov", address: "Șos. Berceni 9, Popești-Leordeni", lat: 44.3708, lng: 26.1354, order: 7 },
-      { id: "loc_8", name: "Mega Image Berceni", city: "Sector 4", county: "București", address: "Șos. Berceni 41, Sector 4", lat: 44.3872, lng: 26.1298, order: 8 },
-      { id: "loc_9", name: "Mega Image Obregia", city: "Sector 4", county: "București", address: "Bd. Alexandru Obregia 25, Sector 4", lat: 44.3842, lng: 26.1176, order: 9 },
-      { id: "loc_10", name: "Penny Nițu Vasile", city: "Sector 4", county: "București", address: "Str. Nițu Vasile 9, Sector 4", lat: 44.3922, lng: 26.1172, order: 10 },
-      { id: "loc_11", name: "Mega Image Piața Sudului", city: "Sector 4", county: "București", address: "Șos. Olteniței 208, Sector 4", lat: 44.3929, lng: 26.1235, order: 11 },
-      { id: "loc_12", name: "Mega Image Brâncoveanu", city: "Sector 4", county: "București", address: "Bd. Constantin Brâncoveanu 45, Sector 4", lat: 44.3934, lng: 26.1025, order: 12 },
-      { id: "loc_13", name: "Mega Image Huedin", city: "Sector 4", county: "București", address: "Str. Grădiștea 8, Sector 4", lat: 44.3846, lng: 26.1038, order: 13 },
-      { id: "loc_14", name: "Penny Luică", city: "Sector 4", county: "București", address: "Str. Luică 23, Sector 4", lat: 44.3828, lng: 26.0954, order: 14 },
-      { id: "loc_15", name: "Mega Image Progresului", city: "Sector 4", county: "București", address: "Șos. Giurgiului 113-115, Sector 4", lat: 44.3882, lng: 26.0862, order: 15 },
-      { id: "loc_16", name: "Mega Image Giurgiului 2", city: "Sector 4", county: "București", address: "Șos. Giurgiului 54, Sector 4", lat: 44.3985, lng: 26.0888, order: 16 },
-      { id: "loc_17", name: "Mega Image City Mall", city: "Sector 4", county: "București", address: "Șos. Olteniței 2, Sector 4", lat: 44.4048, lng: 26.0962, order: 17 },
-      { id: "loc_18", name: "Mega Image Împăratul Traian", city: "Sector 4", county: "București", address: "Str. Împăratul Traian 32, Sector 4", lat: 44.4172, lng: 26.0965, order: 18 },
-      { id: "loc_19", name: "Mega Image Tineretului", city: "Sector 4", county: "București", address: "Bd. Tineretului 1, Sector 4", lat: 44.4140, lng: 26.1072, order: 19 },
-      { id: "loc_20", name: "Penny Timpuri Noi", city: "Sector 4", county: "București", address: "Str. V.V. Stanciu 213, Sector 4", lat: 44.4152, lng: 26.1152, order: 20 }
+    // DATASET ZIUA 1 (Sheet3 - 20 Stores)
+    const STORES_DAY_1 = [
+      { id: "d1_1", name: "Mega Image Popești-Leordeni", city: "Popești-Leordeni", county: "Ilfov", address: "Șos. Olteniței 51A-55, Popești-Leordeni", lat: 44.3802, lng: 26.1685, order: 1 },
+      { id: "d1_2", name: "Mega Image Popești-Leordeni 2", city: "Popești-Leordeni", county: "Ilfov", address: "Șos. Olteniței 18-20, Popești-Leordeni", lat: 44.3887, lng: 26.1542, order: 2 },
+      { id: "d1_3", name: "Mega Image Drumul Binelui", city: "Popești-Leordeni", county: "Ilfov", address: "Str. Drumul Fermei 35, Popești-Leordeni", lat: 44.3739, lng: 26.1498, order: 3 },
+      { id: "d1_4", name: "Mega Image Biruinței 3", city: "Popești-Leordeni", county: "Ilfov", address: "Str. Biruinței 47, Popești-Leordeni", lat: 44.3688, lng: 26.1472, order: 4 },
+      { id: "d1_5", name: "Mega Image Amurgului", city: "Popești-Leordeni", county: "Ilfov", address: "Str. Oituz 46, Popești-Leordeni", lat: 44.3724, lng: 26.1420, order: 5 },
+      { id: "d1_6", name: "Mega Image Monaco Towers", city: "Sector 4", county: "București", address: "Șos. Berceni 96, Sector 4", lat: 44.3765, lng: 26.1394, order: 6 },
+      { id: "d1_7", name: "Penny Leonida", city: "Popești-Leordeni", county: "Ilfov", address: "Șos. Berceni 9, Popești-Leordeni", lat: 44.3708, lng: 26.1354, order: 7 },
+      { id: "d1_8", name: "Mega Image Berceni", city: "Sector 4", county: "București", address: "Șos. Berceni 41, Sector 4", lat: 44.3872, lng: 26.1298, order: 8 },
+      { id: "d1_9", name: "Mega Image Obregia", city: "Sector 4", county: "București", address: "Bd. Alexandru Obregia 25, Sector 4", lat: 44.3842, lng: 26.1176, order: 9 },
+      { id: "d1_10", name: "Penny Nițu Vasile", city: "Sector 4", county: "București", address: "Str. Nițu Vasile 9, Sector 4", lat: 44.3922, lng: 26.1172, order: 10 },
+      { id: "d1_11", name: "Mega Image Piața Sudului", city: "Sector 4", county: "București", address: "Șos. Olteniței 208, Sector 4", lat: 44.3929, lng: 26.1235, order: 11 },
+      { id: "d1_12", name: "Mega Image Brâncoveanu", city: "Sector 4", county: "București", address: "Bd. Constantin Brâncoveanu 45, Sector 4", lat: 44.3934, lng: 26.1025, order: 12 },
+      { id: "d1_13", name: "Mega Image Huedin", city: "Sector 4", county: "București", address: "Str. Grădiștea 8, Sector 4", lat: 44.3846, lng: 26.1038, order: 13 },
+      { id: "d1_14", name: "Penny Luică", city: "Sector 4", county: "București", address: "Str. Luică 23, Sector 4", lat: 44.3828, lng: 26.0954, order: 14 },
+      { id: "d1_15", name: "Mega Image Progresului", city: "Sector 4", county: "București", address: "Șos. Giurgiului 113-115, Sector 4", lat: 44.3882, lng: 26.0862, order: 15 },
+      { id: "d1_16", name: "Mega Image Giurgiului 2", city: "Sector 4", county: "București", address: "Șos. Giurgiului 54, Sector 4", lat: 44.3985, lng: 26.0888, order: 16 },
+      { id: "d1_17", name: "Mega Image City Mall", city: "Sector 4", county: "București", address: "Șos. Olteniței 2, Sector 4", lat: 44.4048, lng: 26.0962, order: 17 },
+      { id: "d1_18", name: "Mega Image Împăratul Traian", city: "Sector 4", county: "București", address: "Str. Împăratul Traian 32, Sector 4", lat: 44.4172, lng: 26.0965, order: 18 },
+      { id: "d1_19", name: "Mega Image Tineretului", city: "Sector 4", county: "București", address: "Bd. Tineretului 1, Sector 4", lat: 44.4140, lng: 26.1072, order: 19 },
+      { id: "d1_20", name: "Penny Timpuri Noi", city: "Sector 4", county: "București", address: "Str. V.V. Stanciu 213, Sector 4", lat: 44.4152, lng: 26.1152, order: 20 }
+    ];
+
+    // DATASET ZIUA 2 (Sheet4 - 19 Stores)
+    const STORES_DAY_2 = [
+      { id: "d2_1", name: "Mega Image Comuna Berceni", city: "Berceni", county: "Ilfov", address: "Bd. 1 Mai 66, Berceni", lat: 44.3168, lng: 26.1795, order: 1 },
+      { id: "d2_2", name: "Penny Berceni", city: "Berceni", county: "Ilfov", address: "Str. Luica 62-64 / Bd. 1 Mai, Berceni", lat: 44.3125, lng: 26.1830, order: 2 },
+      { id: "d2_3", name: "Penny Vidra", city: "Vidra", county: "Ilfov", address: "Str. Principală 91, Vidra", lat: 44.2755, lng: 26.1550, order: 3 },
+      { id: "d2_4", name: "Mega Image Jilava", city: "Jilava", county: "Ilfov", address: "Șos. Giurgiului 288, Jilava", lat: 44.3335, lng: 26.0795, order: 4 },
+      { id: "d2_5", name: "Penny Măgurele", city: "Măgurele", county: "Ilfov", address: "Str. Atomiștilor 373, Măgurele", lat: 44.3485, lng: 26.0335, order: 5 },
+      { id: "d2_6", name: "Mega Image Atomiștilor", city: "Măgurele", county: "Ilfov", address: "Str. Atomiștilor 411, Măgurele", lat: 44.3460, lng: 26.0290, order: 6 },
+      { id: "d2_7", name: "Penny Bragadiru", city: "Bragadiru", county: "Ilfov", address: "Șos. Alexandriei 112, Bragadiru", lat: 44.3685, lng: 25.9960, order: 7 },
+      { id: "d2_8", name: "Mega Image Bragadiru", city: "Bragadiru", county: "Ilfov", address: "Șos. Alexandriei 44, Bragadiru", lat: 44.3780, lng: 26.0125, order: 8 },
+      { id: "d2_9", name: "Penny Plevnei", city: "Bragadiru", county: "Ilfov", address: "Str. Plevnei 11, Bragadiru", lat: 44.3820, lng: 26.0090, order: 9 },
+      { id: "d2_10", name: "Mega Image Bragadiru 2 (Speranței)", city: "Bragadiru", county: "Ilfov", address: "Str. Speranței 77, Bragadiru", lat: 44.3835, lng: 26.0195, order: 10 },
+      { id: "d2_11", name: "Mega Image Mărgelelor 2", city: "Bragadiru", county: "Ilfov", address: "Str. Mărgelelor 23, Bragadiru", lat: 44.3875, lng: 26.0260, order: 11 },
+      { id: "d2_12", name: "Mega Image Cartierul Latin", city: "Bragadiru", county: "Ilfov", address: "Prelungirea Ghencea 53, Bragadiru", lat: 44.4055, lng: 26.0045, order: 12 },
+      { id: "d2_13", name: "PENNY GHENCEA", city: "Bragadiru", county: "Ilfov", address: "Prelungirea Ghencea 14, Bragadiru", lat: 44.4072, lng: 26.0160, order: 13 },
+      { id: "d2_14", name: "Mega Image Pucheni", city: "Sector 5", county: "București", address: "Str. Pucheni 42, Sector 5", lat: 44.3970, lng: 26.0680, order: 14 },
+      { id: "d2_15", "name": "Penny Sălaj", city: "Sector 5", county: "București", address: "Șos. Sălaj 269, Sector 5", lat: 44.3910, lng: 26.0740, order: 15 },
+      { id: "d2_16", "name": "Penny Garun (Năsăud)", city: "Sector 5", county: "București", address: "Str. Năsăud 97, Sector 5", lat: 44.4095, lng: 26.0845, order: 16 },
+      { id: "d2_17", "name": "Mega Image Sebastian", city: "Sector 5", county: "București", address: "Str. Mihail Sebastian 22, Sector 5", lat: 44.4215, lng: 26.0780, order: 17 },
+      { id: "d2_18", "name": "Mega Image 13 Septembrie", city: "Sector 5", county: "București", address: "Calea 13 Septembrie 13, Sector 5", lat: 44.4265, lng: 26.0865, order: 18 },
+      { id: "d2_19", "name": "Mega Image Regina Maria", city: "Sector 5", county: "București", address: "Bd. Regina Maria 23-25, Sector 5", lat: 44.4248, lng: 26.1025, order: 19 }
     ];
 
     class MerchandiserApp {
       constructor() {
+        this.currentDay = localStorage.getItem("merch_active_day") || "day1";
         this.stores = [];
         this.activeStoreId = null;
         this.map = null;
@@ -1363,50 +1428,121 @@ ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil
         this.routePolyline = null;
         this.deviceMode = localStorage.getItem("merch_device_mode") || null;
         this.theme = localStorage.getItem("merch_theme") || "light";
-        this.storeLogs = JSON.parse(localStorage.getItem("merch_store_logs") || "{}");
-        this.priceEntries = JSON.parse(localStorage.getItem("merch_price_entries") || "[]");
-        this.storePhotos = JSON.parse(localStorage.getItem("merch_photos") || "{}");
+        
+        // Data stores per day
+        this.storeLogs = {};
+        this.priceEntries = [];
+        this.storePhotos = {};
       }
 
       init() {
         this.applyTheme(this.theme);
-        this.loadStores();
+        this.loadDayData(this.currentDay);
         this.initMap();
+        this.updateDayUI();
         this.renderSidebarList();
         this.renderReport();
         this.populateFabDropdown();
         this.checkDeviceMode();
         this.setupDraggableFab();
         
-        // Select first store by default
         if (this.stores.length > 0) {
           this.setActiveStore(this.stores[0].id, false);
         }
       }
 
-      loadStores() {
-        // We ensure accurate coordinates by updating from EXACT_STORES
-        this.stores = [...EXACT_STORES];
-        this.saveStores();
+      loadDayData(dayKey) {
+        this.currentDay = dayKey;
+        localStorage.setItem("merch_active_day", dayKey);
+
+        const initialList = dayKey === "day1" ? STORES_DAY_1 : STORES_DAY_2;
+        const savedStores = localStorage.getItem(`merch_stores_${dayKey}`);
+        if (savedStores) {
+          try {
+            this.stores = JSON.parse(savedStores);
+          } catch(e) {
+            this.stores = [...initialList];
+          }
+        } else {
+          this.stores = [...initialList];
+          this.saveStores();
+        }
+
+        this.storeLogs = JSON.parse(localStorage.getItem(`merch_logs_${dayKey}`) || "{}");
+        this.priceEntries = JSON.parse(localStorage.getItem(`merch_prices_${dayKey}`) || "[]");
+        this.storePhotos = JSON.parse(localStorage.getItem(`merch_photos_${dayKey}`) || "{}");
       }
 
       saveStores() {
-        localStorage.setItem("merch_stores", JSON.stringify(this.stores));
+        localStorage.setItem(`merch_stores_${this.currentDay}`, JSON.stringify(this.stores));
       }
 
       saveLogs() {
-        localStorage.setItem("merch_store_logs", JSON.stringify(this.storeLogs));
+        localStorage.setItem(`merch_logs_${this.currentDay}`, JSON.stringify(this.storeLogs));
       }
 
       savePrices() {
-        localStorage.setItem("merch_price_entries", JSON.stringify(this.priceEntries));
+        localStorage.setItem(`merch_prices_${this.currentDay}`, JSON.stringify(this.priceEntries));
       }
 
       savePhotos() {
         try {
-          localStorage.setItem("merch_photos", JSON.stringify(this.storePhotos));
+          localStorage.setItem(`merch_photos_${this.currentDay}`, JSON.stringify(this.storePhotos));
         } catch(e) {
-          console.warn("Storage quota exceeded for photos, keeping in memory.");
+          console.warn("Storage quota exceeded, kept in memory.");
+        }
+      }
+
+      switchDay(dayKey) {
+        if (this.currentDay === dayKey) return;
+        this.loadDayData(dayKey);
+        this.updateDayUI();
+        this.renderMapMarkers();
+        this.drawRoutePolyline();
+        this.renderSidebarList();
+        this.renderReport();
+        this.populateFabDropdown();
+        
+        if (this.stores.length > 0) {
+          this.setActiveStore(this.stores[0].id, false);
+        }
+      }
+
+      updateDayUI() {
+        const isD1 = this.currentDay === "day1";
+        document.getElementById("btnDay1").classList.toggle("active", isD1);
+        document.getElementById("btnDay2").classList.toggle("active", !isD1);
+
+        const originLabel = document.getElementById("routeOriginStatus");
+        const sidebarTitle = document.getElementById("sidebarTitle");
+        const sidebarDesc = document.getElementById("sidebarRouteDesc");
+        const repHeading = document.getElementById("reportMainHeading");
+        const repSub = document.getElementById("reportSubHeading");
+
+        if (isD1) {
+          originLabel.textContent = "Start: Brănești (A2) → Sector 4 & Popești";
+          sidebarTitle.textContent = "Magazine Ziua 1 (20)";
+          sidebarDesc.innerHTML = `
+            <div>🛣️ <strong>Ruta Optimizată:</strong> Plecare din <strong>Brănești pe A2</strong>, vizitare Popești $\rightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil pe Splai / Pallady / A2).</div>
+            <div class="route-stats-row">
+              <span>Distanță: ~19.2 km</span>
+              <span>Timp condus: ~40-50 min</span>
+            </div>
+          `;
+          repHeading.textContent = "📋 Raport Verificare Teren - Ziua 1 (Sector 4 & Popești)";
+          repSub.textContent = "Monitorizare status vizite, prețuri la raft și fotografii pentru cele 20 de magazine.";
+        } else {
+          originLabel.textContent = "Start: Brănești (A2) → Ilfov Sud-Vest & Sector 5";
+          sidebarTitle.textContent = "Magazine Ziua 2 (19)";
+          sidebarDesc.innerHTML = `
+            <div>🛣️ <strong>Ruta Optimizată:</strong> Plecare din <strong>Brănești pe A2</strong>, vizitare Comuna Berceni $\rightarrow$ Vidra $\rightarrow$ Jilava $\rightarrow$ Măgurele $\rightarrow$ Bragadiru $\rightarrow$ Sector 5 și final la <strong>Mega Image Regina Maria</strong> (retur facil pe B-dul Unirii / Pallady / A2).</div>
+            <div class="route-stats-row">
+              <span>Distanță: ~40.3 km</span>
+              <span>Timp condus: ~60-75 min</span>
+            </div>
+          `;
+          repHeading.textContent = "📋 Raport Verificare Teren - Ziua 2 (Ilfov Sud-Vest & Sector 5)";
+          repSub.textContent = "Monitorizare status vizite, prețuri la raft și fotografii pentru cele 19 magazine.";
         }
       }
 
@@ -1472,10 +1608,7 @@ ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil
 
       /* MAP & LEAFLET SETUP */
       initMap() {
-        this.map = L.map('map', {
-          zoomControl: false
-        }).setView([44.388, 26.125], 13);
-
+        this.map = L.map('map', { zoomControl: false }).setView([44.380, 26.100], 12);
         L.control.zoom({ position: 'topright' }).addTo(this.map);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -1509,13 +1642,14 @@ ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil
         this.stores.forEach((store, index) => {
           const icon = this.createPinIcon(store, index);
           const marker = L.marker([store.lat, store.lng], { icon: icon }).addTo(this.map);
-          
-          marker.on('click', () => {
-            this.setActiveStore(store.id, true);
-          });
-
+          marker.on('click', () => this.setActiveStore(store.id, true));
           this.markers[store.id] = marker;
         });
+
+        if (this.stores.length > 0) {
+          const group = new L.featureGroup(Object.values(this.markers));
+          this.map.fitBounds(group.getBounds().pad(0.1));
+        }
       }
 
       drawRoutePolyline() {
@@ -1606,7 +1740,7 @@ ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil
         document.getElementById("storeModalOverlay").classList.remove("active");
       }
 
-      /* DRAGGABLE FLOATING ACTION BUBBLE (TOUCH & MOUSE) */
+      /* DRAGGABLE FLOATING ACTION BUBBLE */
       setupDraggableFab() {
         const fab = document.getElementById("floatingFab");
         if (!fab) return;
@@ -1616,12 +1750,10 @@ ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil
         let initialLeft = 0, initialTop = 0;
         let dragDistance = 0;
 
-        // Restore saved position if available
         const savedPos = localStorage.getItem("merch_fab_pos");
         if (savedPos) {
           try {
             const { x, y } = JSON.parse(savedPos);
-            // Verify within bounds
             const maxX = window.innerWidth - 70;
             const maxY = window.innerHeight - 70;
             const boundedX = Math.max(10, Math.min(x, maxX));
@@ -1653,7 +1785,7 @@ ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil
 
         const onMove = (e) => {
           if (!isDragging) return;
-          e.preventDefault(); // Prevents scroll on mobile during drag
+          e.preventDefault();
           const clientX = e.touches ? e.touches[0].clientX : e.clientX;
           const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
@@ -1664,7 +1796,6 @@ ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil
           let newLeft = initialLeft + deltaX;
           let newTop = initialTop + deltaY;
 
-          // Boundary clamping
           const maxX = window.innerWidth - fab.offsetWidth - 10;
           const maxY = window.innerHeight - fab.offsetHeight - 10;
           newLeft = Math.max(10, Math.min(newLeft, maxX));
@@ -1686,11 +1817,9 @@ ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil
           document.removeEventListener('mousemove', onMove);
           document.removeEventListener('mouseup', onEnd);
 
-          // Save position
           const rect = fab.getBoundingClientRect();
           localStorage.setItem("merch_fab_pos", JSON.stringify({ x: rect.left, y: rect.top }));
 
-          // If tiny movement (< 8px), it's a tap/click -> open FAB window
           if (dragDistance < 8) {
             this.toggleFabWindow();
           }
@@ -1714,7 +1843,8 @@ ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil
           const nextStore = this.stores[currentIndex + 1];
           this.setActiveStore(nextStore.id, true);
         } else {
-          alert("🎉 Ai finalizat traseul de 20 de magazine! Drum bun spre casă pe A2 / Brănești!");
+          const exitPoint = this.currentDay === "day1" ? "Timpuri Noi / Splai / A2" : "Regina Maria / B-dul Unirii / A2";
+          alert(`🎉 Felicitări! Ai finalizat toate cele ${this.stores.length} magazine din traseu! Drum bun spre casă spre Brănești via ${exitPoint}!`);
         }
       }
 
@@ -1761,17 +1891,18 @@ ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil
 
       /* ROUTE RE-ORDERING */
       reorderRoute(strategy) {
-        if (strategy === "start-popesti") {
-          this.stores = [...EXACT_STORES];
-        } else if (strategy === "start-timpuri") {
-          this.stores = [...EXACT_STORES].reverse().map((s, idx) => ({ ...s, order: idx + 1 }));
+        const canonical = this.currentDay === "day1" ? STORES_DAY_1 : STORES_DAY_2;
+        if (strategy === "tur") {
+          this.stores = [...canonical];
+        } else if (strategy === "retur") {
+          this.stores = [...canonical].reverse().map((s, idx) => ({ ...s, order: idx + 1 }));
         }
         this.saveStores();
         this.renderSidebarList();
         this.renderMapMarkers();
         this.drawRoutePolyline();
         this.setActiveStore(this.stores[0].id, false);
-        alert(`Traseu reordonat: ${strategy === 'start-popesti' ? 'Tur (Popești -> Timpuri Noi)' : 'Retur (Timpuri Noi -> Popești)'}`);
+        alert(`Traseu reordonat: ${strategy === 'tur' ? 'Ordine Tur (Optimizată A2)' : 'Ordine Inversată (Retur)'}`);
       }
 
       /* SIDEBAR RENDERING */
@@ -2067,8 +2198,10 @@ ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil
 
       copyWhatsAppReport() {
         const dateStr = new Date().toLocaleDateString('ro-RO');
-        let text = `📊 *RAPORT MERCHANDISER TEREN - ${dateStr}*\n`;
-        text += `🚗 Traseu: Start Brănești (A2) ➔ Popești-Leordeni & Sector 4\n\n`;
+        const dayLabel = this.currentDay === "day1" ? "ZIUA 1 (Sector 4 & Popești)" : "ZIUA 2 (Ilfov Sud-Vest & Sector 5)";
+        let text = `📊 *RAPORT MERCHANDISER TEREN - ${dayLabel}*\n`;
+        text += `📅 Data: ${dateStr}\n`;
+        text += `🚗 Traseu: Plecare din Brănești (A2)\n\n`;
 
         let resolved = 0;
         let unresolved = 0;
@@ -2101,13 +2234,14 @@ ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil
         text += `\n📈 *Sumar Zi:* ${resolved} Rezolvate | ${unresolved} Nerezolvate | ${this.stores.length - resolved - unresolved} Rămase`;
 
         navigator.clipboard.writeText(text.replace(/\\n/g, '\n')).then(() => {
-          alert("✓ Raportul a fost copiat în Clipboard! Îl poți trimite direct pe WhatsApp.");
+          alert(`✓ Raportul pentru ${dayLabel} a fost copiat în Clipboard! Îl poți trimite direct pe WhatsApp.`);
         }).catch(() => {
           alert("Nu s-a putut copia automat. Te rugăm să verifici permisiunile browserului.");
         });
       }
 
       exportCSV() {
+        const dayTag = this.currentDay.toUpperCase();
         let csv = "\uFEFFNr,Magazin,Oras,Adresa,Ora Vizita,Status,Motiv / Observatii,Produse & Preturi,Numar Poze\n";
         
         this.stores.forEach((store, idx) => {
@@ -2125,12 +2259,13 @@ ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil
         const blob = new Blob([csv.replace(/\\n/g, '\n')], { type: "text/csv;charset=utf-8;" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = `Raport_Merchandiser_${new Date().toISOString().slice(0,10)}.csv`;
+        link.download = `Raport_Merchandiser_${dayTag}_${new Date().toISOString().slice(0,10)}.csv`;
         link.click();
       }
 
       resetDayProgress() {
-        if (confirm("⚠️ Ești sigur că vrei să resetezi statusul pentru ziua de azi? Toate vizitele și prețurile vor fi șterse pentru un nou început.")) {
+        const dayName = this.currentDay === "day1" ? "Ziua 1" : "Ziua 2";
+        if (confirm(`⚠️ Ești sigur că vrei să resetezi statusul pentru ${dayName}? Toate vizitele și prețurile din această zi vor fi șterse pentru un nou început.`)) {
           this.storeLogs = {};
           this.priceEntries = [];
           this.storePhotos = {};
@@ -2142,7 +2277,7 @@ ightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil
           this.renderReport();
           this.renderPhotoPreviews();
           this.setActiveStore(this.stores[0].id, false);
-          alert("✓ Ziua a fost resetată cu succes!");
+          alert(`✓ Progresul pentru ${dayName} a fost resetat cu succes!`);
         }
       }
     }
