@@ -135,7 +135,7 @@
       display: block;
     }
 
-    /* Day Switcher Component (3 Days) */
+    /* Day Switcher Component (4 Days) */
     .day-selector-container {
       display: flex;
       align-items: center;
@@ -143,10 +143,14 @@
       background-color: var(--gray-100);
       padding: 3px;
       border-radius: 10px;
+      overflow-x: auto;
+      max-width: 100%;
+      scrollbar-width: none;
     }
+    .day-selector-container::-webkit-scrollbar { display: none; }
 
     .day-btn {
-      padding: 6px 10px;
+      padding: 6px 9px;
       font-size: 11px;
       font-weight: 700;
       border: none;
@@ -1184,7 +1188,7 @@
     </div>
   </div>
 
-  <!-- Header / Navigation Bar with 3-Day Selector -->
+  <!-- Header / Navigation Bar with 4-Day Selector -->
   <header>
     <div class="brand">
       <div class="brand-logo">M</div>
@@ -1194,7 +1198,7 @@
       </div>
     </div>
 
-    <!-- Day Selector Pills (Ziua 1, Ziua 2, Ziua 3) -->
+    <!-- Day Selector Pills (Ziua 1, Ziua 2, Ziua 3, Ziua 4) -->
     <div class="day-selector-container">
       <button class="day-btn active" id="btnDay1" onclick="app.switchDay('day1')">
         📅 Ziua 1 (20)
@@ -1204,6 +1208,9 @@
       </button>
       <button class="day-btn" id="btnDay3" onclick="app.switchDay('day3')">
         📅 Ziua 3 (20)
+      </button>
+      <button class="day-btn" id="btnDay4" onclick="app.switchDay('day4')">
+        📅 Ziua 4 (14)
       </button>
     </div>
 
@@ -1557,7 +1564,7 @@
   <div class="modal-overlay" id="backupModalOverlay" style="align-items: center;" onclick="if(event.target === this) app.closeBackupModal()">
     <div class="reason-dialog" style="max-width: 420px;">
       <h3 style="font-size: 16px; font-weight: 700;">💾 Backup & Restaurare Date</h3>
-      <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Salvează un fișier JSON cu toate datele, pozele și prețurile culese pe cele 3 zile pentru siguranță.</p>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Salvează un fișier JSON cu toate datele, pozele și prețurile culese pe cele 4 zile pentru siguranță.</p>
       
       <div style="display: flex; flex-direction: column; gap: 10px; margin: 18px 0;">
         <button class="btn btn-primary" onclick="app.exportFullBackup()">
@@ -1603,33 +1610,29 @@
 
   <script>
     /**
-     * MERCHANDISER PRO APPLICATION - FULL ENHANCED SUITE
-     * Includes:
-     * - Multi-day support (Ziua 1, Ziua 2, Ziua 3)
-     * - Live GPS tracking & Nearest Store Finder
-     * - Multi-navigation (Waze, Google Maps, Apple Maps)
-     * - Automatic Photo Compression (Canvas 800px, 80-120KB)
-     * - Before / After Photo Slots + Out of Stock + Facings
-     * - Store Filters (All, Mega, Penny, Profi, Pending, Completed)
-     * - Full Backup & Restore (JSON)
+     * MERCHANDISER PRO APPLICATION - 4-DAY EXPANDED EDITION
+     * - Ziua 1 (Sector 4 & Popești - 20 magazine)
+     * - Ziua 2 (Ilfov Sud-Vest & Sector 5 - 19 magazine)
+     * - Ziua 3 (Ilfov Nord-Vest Chitila/Chiajna/Domnești & Sector 6 - 20 magazine)
+     * - Ziua 4 (Sector 6 Giulești/Crângași/Militari/Drumul Taberei - 14 magazine)
      */
     
     // DATASET ZIUA 1 (Sheet3 - 20 Stores)
     const STORES_DAY_1 = [
-      { id: "d1_1", name: "Mega Image Popești-Leordeni", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Șos. Olteniței 51A-55, Popești-Leordeni", lat: 44.3803, lng: 26.1684, order: 1 },
-      { id: "d1_2", name: "Mega Image Popești-Leordeni 2", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Șos. Olteniței 18-20, Popești-Leordeni", lat: 44.3813, lng: 26.1538, order: 2 },
-      { id: "d1_3", name: "Mega Image Drumul Binelui", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Str. Drumul Fermei 35, Popești-Leordeni", lat: 44.3757, lng: 26.1565, order: 3 },
-      { id: "d1_4", name: "Mega Image Biruinței 3", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Str. Biruinței 47, Popești-Leordeni", lat: 44.3666, lng: 26.1539, order: 4 },
-      { id: "d1_5", name: "Mega Image Amurgului", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Str. Oituz 46, Popești-Leordeni", lat: 44.3733, lng: 26.1477, order: 5 },
-      { id: "d1_6", name: "Mega Image Monaco Towers", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Berceni 96, Sector 4", lat: 44.3713, lng: 26.1411, order: 6 },
-      { id: "d1_7", name: "Penny Leonida", chain: "Penny", city: "Popești-Leordeni", county: "Ilfov", address: "Șos. Berceni 9, Popești-Leordeni", lat: 44.3668, lng: 26.1447, order: 7 },
-      { id: "d1_8", name: "Mega Image Berceni", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Berceni 41, Sector 4", lat: 44.3826, lng: 26.1320, order: 8 },
-      { id: "d1_9", name: "Mega Image Obregia", chain: "Mega Image", city: "Sector 4", county: "București", address: "Bd. Alexandru Obregia 25, Sector 4", lat: 44.3829, lng: 26.11512, order: 9 },
-      { id: "d1_10", name: "Penny Nițu Vasile", chain: "Penny", city: "Sector 4", county: "București", address: "Str. Nițu Vasile 9, Sector 4", lat: 44.3895, lng: 26.1187, order: 10 },
-      { id: "d1_11", name: "Mega Image Piața Sudului", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Olteniței 208, Sector 4", lat: 44.3939, lng: 26.1200, order: 11 },
-      { id: "d1_12", name: "Mega Image Brâncoveanu", chain: "Mega Image", city: "Sector 4", county: "București", address: "Bd. Constantin Brâncoveanu 45, Sector 4", lat: 44.3917, lng: 26.1100, order: 12 },
-      { id: "d1_13", name: "Mega Image Huedin", chain: "Mega Image", city: "Sector 4", county: "București", address: "Str. Grădiștea 8, Sector 4", lat: 44.3826, lng: 26.1009, order: 13 },
-      { id: "d1_14", name: "Penny Luică", chain: "Penny", city: "Sector 4", county: "București", address: "Str. Luică 23, Sector 4", lat: 44.3826, lng: 26.1010, order: 14 },
+      { id: "d1_1", name: "Mega Image Popești-Leordeni", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Șos. Olteniței 51A-55, Popești-Leordeni", lat: 44.3802, lng: 26.1685, order: 1 },
+      { id: "d1_2", name: "Mega Image Popești-Leordeni 2", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Șos. Olteniței 18-20, Popești-Leordeni", lat: 44.3887, lng: 26.1542, order: 2 },
+      { id: "d1_3", name: "Mega Image Drumul Binelui", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Str. Drumul Fermei 35, Popești-Leordeni", lat: 44.3739, lng: 26.1498, order: 3 },
+      { id: "d1_4", name: "Mega Image Biruinței 3", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Str. Biruinței 47, Popești-Leordeni", lat: 44.3688, lng: 26.1472, order: 4 },
+      { id: "d1_5", name: "Mega Image Amurgului", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Str. Oituz 46, Popești-Leordeni", lat: 44.3724, lng: 26.1420, order: 5 },
+      { id: "d1_6", name: "Mega Image Monaco Towers", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Berceni 96, Sector 4", lat: 44.3765, lng: 26.1394, order: 6 },
+      { id: "d1_7", name: "Penny Leonida", chain: "Penny", city: "Popești-Leordeni", county: "Ilfov", address: "Șos. Berceni 9, Popești-Leordeni", lat: 44.3708, lng: 26.1354, order: 7 },
+      { id: "d1_8", name: "Mega Image Berceni", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Berceni 41, Sector 4", lat: 44.3872, lng: 26.1298, order: 8 },
+      { id: "d1_9", name: "Mega Image Obregia", chain: "Mega Image", city: "Sector 4", county: "București", address: "Bd. Alexandru Obregia 25, Sector 4", lat: 44.3842, lng: 26.1176, order: 9 },
+      { id: "d1_10", name: "Penny Nițu Vasile", chain: "Penny", city: "Sector 4", county: "București", address: "Str. Nițu Vasile 9, Sector 4", lat: 44.3922, lng: 26.1172, order: 10 },
+      { id: "d1_11", name: "Mega Image Piața Sudului", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Olteniței 208, Sector 4", lat: 44.3929, lng: 26.1235, order: 11 },
+      { id: "d1_12", name: "Mega Image Brâncoveanu", chain: "Mega Image", city: "Sector 4", county: "București", address: "Bd. Constantin Brâncoveanu 45, Sector 4", lat: 44.3934, lng: 26.1025, order: 12 },
+      { id: "d1_13", name: "Mega Image Huedin", chain: "Mega Image", city: "Sector 4", county: "București", address: "Str. Grădiștea 8, Sector 4", lat: 44.3846, lng: 26.1038, order: 13 },
+      { id: "d1_14", name: "Penny Luică", chain: "Penny", city: "Sector 4", county: "București", address: "Str. Luică 23, Sector 4", lat: 44.3828, lng: 26.0954, order: 14 },
       { id: "d1_15", name: "Mega Image Progresului", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Giurgiului 113-115, Sector 4", lat: 44.3882, lng: 26.0862, order: 15 },
       { id: "d1_16", name: "Mega Image Giurgiului 2", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Giurgiului 54, Sector 4", lat: 44.3985, lng: 26.0888, order: 16 },
       { id: "d1_17", name: "Mega Image City Mall", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Olteniței 2, Sector 4", lat: 44.4048, lng: 26.0962, order: 17 },
@@ -1685,6 +1688,24 @@
       { id: "d3_20", name: "Profi Brașov", chain: "Profi", city: "Sector 6", county: "București", address: "Str. Brașov 24, Sector 6", lat: 44.4230, lng: 26.0355, order: 20 }
     ];
 
+    // DATASET ZIUA 4 (Sheet6 - 14 Stores)
+    const STORES_DAY_4 = [
+      { id: "d4_1", name: "Mega Image Giulești", chain: "Mega Image", city: "Sector 6", county: "București", address: "Calea Giulești 38-40, Sector 6", lat: 44.4532, lng: 26.0578, order: 1 },
+      { id: "d4_2", name: "Mega Image Piața Crângași", chain: "Mega Image", city: "Sector 6", county: "București", address: "Calea Crângași 29, Sector 6", lat: 44.4520, lng: 26.0465, order: 2 },
+      { id: "d4_3", name: "Penny Crângași (Virtuții)", chain: "Penny", city: "Sector 6", county: "București", address: "Șos. Virtuții 148, Sector 6", lat: 44.4468, lng: 26.0375, order: 3 },
+      { id: "d4_4", name: "Mega Image Uverturii", chain: "Mega Image", city: "Sector 6", county: "București", address: "Bd. Uverturii 83, Sector 6", lat: 44.4398, lng: 26.0175, order: 4 },
+      { id: "d4_5", name: "Mega Image Apusului", chain: "Mega Image", city: "Sector 6", county: "București", address: "Str. Apusului 50, Sector 6", lat: 44.4365, lng: 26.0078, order: 5 },
+      { id: "d4_6", name: "Penny Păcii", chain: "Penny", city: "Sector 6", county: "București", address: "Bd. Iuliu Maniu 220C, Sector 6", lat: 44.4338, lng: 25.9925, order: 6 },
+      { id: "d4_7", name: "Mega Image Mărgelelor", chain: "Mega Image", city: "Sector 6", county: "București", address: "Str. Mărgelelor 6, Sector 6", lat: 44.4305, lng: 25.9865, order: 7 },
+      { id: "d4_8", name: "Mega Image Prelungirea Ghencea 89", chain: "Mega Image", city: "Sector 6", county: "București", address: "Prelungirea Ghencea 89, Sector 6", lat: 44.4098, lng: 26.0025, order: 8 },
+      { id: "d4_9", name: "Mega Image Valea Oltului", chain: "Mega Image", city: "Sector 6", county: "București", address: "Str. Valea Oltului 131-137, Sector 6", lat: 44.4128, lng: 26.0225, order: 9 },
+      { id: "d4_10", name: "Mega Image Bd. Timișoara 56", chain: "Mega Image", city: "Sector 6", county: "București", address: "Bd. Timișoara 56, Sector 6", lat: 44.4252, lng: 26.0125, order: 10 },
+      { id: "d4_11", name: "Mega Image Compozitorilor", chain: "Mega Image", city: "Sector 6", county: "București", address: "Bd. 1 Mai 28, Sector 6", lat: 44.4238, lng: 26.0385, order: 11 },
+      { id: "d4_12", name: "Mega Image Compozitorilor - Sibiu", chain: "Mega Image", city: "Sector 6", county: "București", address: "Bd. 1 Mai 18, Sector 6", lat: 44.4248, lng: 26.0465, order: 12 },
+      { id: "d4_13", name: "Mega Image Timișoara Plaza", chain: "Mega Image", city: "Sector 6", county: "București", address: "Bd. Timișoara 26, Sector 6", lat: 44.4285, lng: 26.0360, order: 13 },
+      { id: "d4_14", name: "Mega Image Timișoara 18", chain: "Mega Image", city: "Sector 6", county: "București", address: "Bd. Timișoara 18, Sector 6", lat: 44.4298, lng: 26.0535, order: 14 }
+    ];
+
     class MerchandiserApp {
       constructor() {
         this.currentDay = localStorage.getItem("merch_active_day") || "day1";
@@ -1704,7 +1725,7 @@
         // Data per day
         this.storeLogs = {};
         this.priceEntries = [];
-        this.storePhotos = {}; // format: { [storeId]: { before?: string, after?: string, general?: [] } }
+        this.storePhotos = {};
         this.currentUploadSlot = "general";
       }
 
@@ -1731,6 +1752,7 @@
         let initialList = STORES_DAY_1;
         if (dayKey === "day2") initialList = STORES_DAY_2;
         if (dayKey === "day3") initialList = STORES_DAY_3;
+        if (dayKey === "day4") initialList = STORES_DAY_4;
 
         const savedStores = localStorage.getItem(`merch_stores_${dayKey}`);
         if (savedStores) {
@@ -1789,6 +1811,7 @@
         document.getElementById("btnDay1").classList.toggle("active", d === "day1");
         document.getElementById("btnDay2").classList.toggle("active", d === "day2");
         document.getElementById("btnDay3").classList.toggle("active", d === "day3");
+        document.getElementById("btnDay4").classList.toggle("active", d === "day4");
 
         const originLabel = document.getElementById("routeOriginStatus");
         const sidebarTitle = document.getElementById("sidebarTitle");
@@ -1820,7 +1843,7 @@
           `;
           repHeading.textContent = "📋 Raport Verificare Teren - Ziua 2 (Ilfov Sud-Vest & Sector 5)";
           repSub.textContent = "Monitorizare status vizite, prețuri la raft și fotografii pentru cele 19 magazine.";
-        } else {
+        } else if (d === "day3") {
           originLabel.textContent = "Start: Brănești (A2) → Chitila / Chiajna / Domnești / Sector 6";
           sidebarTitle.textContent = "Magazine Ziua 3 (20)";
           sidebarDesc.innerHTML = `
@@ -1832,6 +1855,18 @@
           `;
           repHeading.textContent = "📋 Raport Verificare Teren - Ziua 3 (Chitila, Chiajna, Domnești & Sector 6)";
           repSub.textContent = "Monitorizare status vizite, prețuri la raft și fotografii pentru cele 20 de magazine.";
+        } else {
+          originLabel.textContent = "Start: Brănești (A2) → Giulești / Crângași / Militari / Drumul Taberei";
+          sidebarTitle.textContent = "Magazine Ziua 4 (14)";
+          sidebarDesc.innerHTML = `
+            <div>🛣️ <strong>Ruta Optimizată:</strong> Plecare din <strong>Brănești pe A2</strong>, vizitare Giulești $\rightarrow$ Crângași $\rightarrow$ Militari (Uverturii/Apusului/Păcii) $\rightarrow$ Drumul Taberei și final la <strong>Mega Image Timișoara 18</strong> (retur facil pe Răzoare / Unirii / Pallady / A2).</div>
+            <div class="route-stats-row">
+              <span>Distanță: ~17.2 km</span>
+              <span>Timp condus: ~35-45 min</span>
+            </div>
+          `;
+          repHeading.textContent = "📋 Raport Verificare Teren - Ziua 4 (Sector 6)";
+          repSub.textContent = "Monitorizare status vizite, prețuri la raft și fotografii pentru cele 14 magazine.";
         }
       }
 
@@ -1897,7 +1932,7 @@
 
       /* MAP & LEAFLET SETUP */
       initMap() {
-        this.map = L.map('map', { zoomControl: false }).setView([44.420, 26.050], 12);
+        this.map = L.map('map', { zoomControl: false }).setView([44.430, 26.030], 12);
         L.control.zoom({ position: 'topright' }).addTo(this.map);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -2177,7 +2212,9 @@
 
         if (closest) {
           this.setActiveStore(closest.id, true);
-          alert(`🎯 Cel mai apropiat magazin rămas:\n*${closest.name}*\nDistanță directă: ~${minDist.toFixed(2)} km`);
+          alert(`🎯 Cel mai apropiat magazin rămas:
+*${closest.name}*
+Distanță directă: ~${minDist.toFixed(2)} km`);
         }
       }
 
@@ -2298,6 +2335,7 @@
           let exitPoint = "Timpuri Noi / Splai / A2";
           if (this.currentDay === "day2") exitPoint = "Regina Maria / B-dul Unirii / A2";
           if (this.currentDay === "day3") exitPoint = "Str. Brașov / Răzoare / Splai / A2";
+          if (this.currentDay === "day4") exitPoint = "Bd. Timișoara 18 / Răzoare / Splai / A2";
           alert(`🎉 Felicitări! Ai finalizat toate cele ${this.stores.length} magazine din traseu! Drum bun spre casă spre Brănești via ${exitPoint}!`);
         }
       }
@@ -2353,6 +2391,7 @@
         let canonical = STORES_DAY_1;
         if (this.currentDay === "day2") canonical = STORES_DAY_2;
         if (this.currentDay === "day3") canonical = STORES_DAY_3;
+        if (this.currentDay === "day4") canonical = STORES_DAY_4;
 
         if (strategy === "tur") {
           this.stores = [...canonical];
@@ -2463,11 +2502,6 @@
         document.getElementById("fabPhotoInput").click();
       }
 
-      /**
-       * High-speed Canvas Image Compression
-       * Resizes 48MP iPhone images down to max 850px @ 0.75 JPEG (~80-120KB)
-       * Prevents memory crashes and localStorage exhaustion!
-       */
       compressImageFile(file, maxWidth = 850, quality = 0.75) {
         return new Promise((resolve) => {
           const reader = new FileReader();
@@ -2604,7 +2638,6 @@
         this.priceEntries.push(newEntry);
         this.savePrices();
 
-        // Clear input fields
         document.getElementById("fabProductName").value = "";
         document.getElementById("fabPriceRegular").value = "";
         document.getElementById("fabPricePromo").value = "";
@@ -2740,6 +2773,7 @@
         let dayLabel = "ZIUA 1 (Sector 4 & Popești)";
         if (this.currentDay === "day2") dayLabel = "ZIUA 2 (Ilfov Sud-Vest & Sector 5)";
         if (this.currentDay === "day3") dayLabel = "ZIUA 3 (Chitila / Chiajna / Domnești & Sector 6)";
+        if (this.currentDay === "day4") dayLabel = "ZIUA 4 (Sector 6 - Giulești / Crângași / Militari / Drumul Taberei)";
 
         let text = `📊 *RAPORT MERCHANDISER TEREN - ${dayLabel}*\n`;
         text += `📅 Data: ${dateStr}\n`;
@@ -2807,7 +2841,7 @@
         link.click();
       }
 
-      /* BACKUP & RESTORE COMPLETE STATE */
+      /* BACKUP & RESTORE COMPLETE STATE FOR ALL 4 DAYS */
       openBackupModal() {
         document.getElementById("backupModalOverlay").classList.add("active");
       }
@@ -2818,7 +2852,7 @@
 
       exportFullBackup() {
         const backupData = {
-          version: "2.0",
+          version: "2.1",
           exportDate: new Date().toISOString(),
           day1_stores: localStorage.getItem("merch_stores_day1"),
           day1_logs: localStorage.getItem("merch_logs_day1"),
@@ -2832,14 +2866,18 @@
           day3_logs: localStorage.getItem("merch_logs_day3"),
           day3_prices: localStorage.getItem("merch_prices_day3"),
           day3_photos: localStorage.getItem("merch_photos_day3"),
+          day4_stores: localStorage.getItem("merch_stores_day4"),
+          day4_logs: localStorage.getItem("merch_logs_day4"),
+          day4_prices: localStorage.getItem("merch_prices_day4"),
+          day4_photos: localStorage.getItem("merch_photos_day4"),
         };
 
         const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: "application/json" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = `Merchandiser_Backup_Total_${new Date().toISOString().slice(0,10)}.json`;
+        link.download = `Merchandiser_Backup_Total_4Zile_${new Date().toISOString().slice(0,10)}.json`;
         link.click();
-        alert("✓ Salvarea completă (Backup JSON) a fost descărcată cu succes!");
+        alert("✓ Salvarea completă (Backup JSON pentru toate cele 4 zile) a fost descărcată cu succes!");
       }
 
       importBackupFile(event) {
@@ -2862,7 +2900,11 @@
             if (data.day3_prices) localStorage.setItem("merch_prices_day3", data.day3_prices);
             if (data.day3_photos) localStorage.setItem("merch_photos_day3", data.day3_photos);
 
-            alert("✓ Toate datele și pozele au fost restaurate cu succes!");
+            if (data.day4_logs) localStorage.setItem("merch_logs_day4", data.day4_logs);
+            if (data.day4_prices) localStorage.setItem("merch_prices_day4", data.day4_prices);
+            if (data.day4_photos) localStorage.setItem("merch_photos_day4", data.day4_photos);
+
+            alert("✓ Toate datele și pozele pentru cele 4 zile au fost restaurate cu succes!");
             location.reload();
           } catch(err) {
             alert("Fișierul de backup este invalid sau corupt.");
@@ -2875,6 +2917,7 @@
         let dayName = "Ziua 1";
         if (this.currentDay === "day2") dayName = "Ziua 2";
         if (this.currentDay === "day3") dayName = "Ziua 3";
+        if (this.currentDay === "day4") dayName = "Ziua 4";
 
         if (confirm(`⚠️ Ești sigur că vrei să resetezi statusul pentru ${dayName}? Toate vizitele și prețurile din această zi vor fi șterse pentru un nou început.`)) {
           this.storeLogs = {};
