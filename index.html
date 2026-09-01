@@ -99,7 +99,7 @@
       z-index: 1000;
       flex-shrink: 0;
       gap: 8px;
-      flex-wrap: wrap;
+      position: relative;
     }
 
     .brand {
@@ -134,58 +134,96 @@
       display: block;
     }
 
-    /* Week & Day Navigation Hierarchy */
-    .week-nav-wrapper {
+    /* Week 1 Dropdown Selector (Space Saving) */
+    .week-dropdown-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .week-dropdown-btn {
       display: flex;
       align-items: center;
       gap: 6px;
       background-color: var(--gray-100);
-      padding: 3px 6px;
+      border: 1px solid var(--border);
+      padding: 6px 12px;
       border-radius: 10px;
-      overflow-x: auto;
-      max-width: 100%;
-      scrollbar-width: none;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s;
     }
-    .week-nav-wrapper::-webkit-scrollbar { display: none; }
 
-    .week-tag {
+    .week-dropdown-btn:hover {
+      background-color: var(--gray-200);
+      border-color: var(--primary);
+    }
+
+    .active-day-pill {
+      background: var(--primary);
+      color: white;
       font-size: 11px;
       font-weight: 800;
-      color: var(--primary);
-      background: var(--primary-light);
-      padding: 4px 8px;
+      padding: 2px 7px;
       border-radius: 6px;
-      white-space: nowrap;
+    }
+
+    .week-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+      width: 240px;
+      padding: 6px;
+      z-index: 2500;
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      animation: popIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .week-dropdown-menu.show {
+      display: flex;
+    }
+
+    .dropdown-header {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      padding: 4px 8px;
     }
 
-    .day-selector-pills {
+    .week-menu-item {
       display: flex;
       align-items: center;
-      gap: 3px;
-    }
-
-    .day-btn {
-      padding: 5px 9px;
-      font-size: 11px;
-      font-weight: 700;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-radius: 8px;
       border: none;
       background: transparent;
-      color: var(--text-muted);
-      border-radius: 6px;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 3px;
-      transition: all 0.2s;
-      white-space: nowrap;
+      transition: all 0.15s;
+      text-align: left;
     }
 
-    .day-btn.active {
-      background-color: var(--primary);
-      color: white;
-      box-shadow: 0 2px 5px rgba(37,99,235,0.3);
+    .week-menu-item:hover {
+      background: var(--gray-100);
+      color: var(--primary);
+    }
+
+    .week-menu-item.active {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 800;
     }
 
     .nav-tabs {
@@ -238,7 +276,8 @@
       transition: all 0.2s;
     }
     .icon-btn:hover { background-color: var(--gray-100); }
-    .icon-btn.active-gps { background-color: var(--primary-light); color: var(--primary); border-color: var(--primary); }
+    .icon-btn.active-btn { background-color: var(--primary-light); color: var(--primary); border-color: var(--primary); }
+    .icon-btn.unlocked-btn { background-color: var(--warning-light); color: #d97706; border-color: var(--warning); }
 
     .badge {
       display: inline-flex;
@@ -450,7 +489,7 @@
       line-height: 1.3;
     }
 
-    /* Map floating control overlay stack */
+    /* Map floating control overlay stack (Top Right, completely separate from Layer Controls) */
     .map-fab-stack {
       position: absolute;
       top: 14px;
@@ -476,7 +515,7 @@
       transition: all 0.2s;
     }
     .map-action-bubble:hover { transform: scale(1.06); }
-    .map-action-bubble.active-gps { background: var(--primary); color: white; }
+    .map-action-bubble.active-btn { background: var(--primary); color: white; border-color: var(--primary); }
 
     /* Drag notification toast */
     .map-toast-alert {
@@ -484,14 +523,14 @@
       top: 14px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(15, 23, 42, 0.9);
+      background: rgba(15, 23, 42, 0.92);
       color: white;
       padding: 8px 16px;
       border-radius: 20px;
       font-size: 12px;
       font-weight: 600;
       z-index: 2000;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
       display: none;
       align-items: center;
       gap: 6px;
@@ -502,7 +541,7 @@
       to { opacity: 1; transform: translate(-50%, 0); }
     }
 
-    /* Mobile Quick Bar at Map Bottom */
+    /* Mobile Quick Card at bottom of screen (Clean, Hidden by default, Opens on Store Click) */
     .mobile-quick-card {
       position: absolute;
       bottom: 20px;
@@ -514,7 +553,13 @@
       box-shadow: var(--shadow-lg);
       border: 1px solid var(--border);
       z-index: 999;
-      display: none;
+      display: none; /* Only shown when a store is selected! */
+      animation: slideUpQuick 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideUpQuick {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* Bottom Action Sheet / Modal */
@@ -690,7 +735,7 @@
       pointer-events: none;
     }
 
-    /* New Dynamic Product List Form Window */
+    /* Dynamic Product List Form Window */
     .fab-window {
       position: fixed;
       bottom: 90px;
@@ -1148,7 +1193,6 @@
     /* Responsive adjustments */
     @media (max-width: 768px) {
       .map-sidebar { display: none; }
-      .mobile-quick-card { display: block; }
       header { padding: 6px 10px; }
       .brand-info span { display: none; }
       .fab-window {
@@ -1236,7 +1280,7 @@
     </div>
   </div>
 
-  <!-- Header with Week 1 & Days 1-5 -->
+  <!-- Header with Space-Saving Week 1 Dropdown Selector -->
   <header>
     <div class="brand">
       <div class="brand-logo">M</div>
@@ -1246,15 +1290,31 @@
       </div>
     </div>
 
-    <!-- Week 1 Navigation with Day Pills -->
-    <div class="week-nav-wrapper">
-      <span class="week-tag">Săptămâna 1</span>
-      <div class="day-selector-pills">
-        <button class="day-btn active" id="btnDay1" onclick="app.switchDay('day1')">Ziua 1 (20)</button>
-        <button class="day-btn" id="btnDay2" onclick="app.switchDay('day2')">Ziua 2 (19)</button>
-        <button class="day-btn" id="btnDay3" onclick="app.switchDay('day3')">Ziua 3 (20)</button>
-        <button class="day-btn" id="btnDay4" onclick="app.switchDay('day4')">Ziua 4 (14)</button>
-        <button class="day-btn" id="btnDay5" onclick="app.switchDay('day5')">Ziua 5 (19)</button>
+    <!-- Week 1 Space-Saving Dropdown Picker -->
+    <div class="week-dropdown-container">
+      <button class="week-dropdown-btn" id="weekDropdownTriggerBtn" onclick="app.toggleWeekDropdown(event)">
+        <span>📅 Săptămâna 1</span>
+        <span class="active-day-pill" id="activeDayHeaderLabel">Ziua 1 (20)</span>
+        <span style="font-size: 10px; color: var(--text-muted);">▼</span>
+      </button>
+
+      <div class="week-dropdown-menu" id="weekDropdownMenu">
+        <div class="dropdown-header">Alege Ziua de Lucru:</div>
+        <button class="week-menu-item active" id="btnDay1" onclick="app.selectDayFromMenu('day1')">
+          <span>📅 Ziua 1</span> <span class="badge badge-primary">20 Magazine</span>
+        </button>
+        <button class="week-menu-item" id="btnDay2" onclick="app.selectDayFromMenu('day2')">
+          <span>📅 Ziua 2</span> <span class="badge badge-primary">19 Magazine</span>
+        </button>
+        <button class="week-menu-item" id="btnDay3" onclick="app.selectDayFromMenu('day3')">
+          <span>📅 Ziua 3</span> <span class="badge badge-primary">20 Magazine</span>
+        </button>
+        <button class="week-menu-item" id="btnDay4" onclick="app.selectDayFromMenu('day4')">
+          <span>📅 Ziua 4</span> <span class="badge badge-primary">14 Magazine</span>
+        </button>
+        <button class="week-menu-item" id="btnDay5" onclick="app.selectDayFromMenu('day5')">
+          <span>📅 Ziua 5</span> <span class="badge badge-primary">19 Magazine</span>
+        </button>
       </div>
     </div>
 
@@ -1268,8 +1328,10 @@
       </button>
     </div>
 
-    <!-- Actions -->
+    <!-- Actions (GPS, Lock Pin, Backup, Display Mode, Theme) -->
     <div class="header-actions">
+      <!-- Lock / Unlock Pins Button -->
+      <button class="icon-btn" id="headerLockBtn" title="Pini Blocați împotriva mutării accidentale (Apasă pt a debloca)" onclick="app.togglePinLock()">🔒</button>
       <button class="icon-btn" id="headerGpsBtn" title="Localizare GPS live" onclick="app.toggleGpsTracking()">📍</button>
       <button class="icon-btn" title="Backup / Restaurare Date" onclick="app.openBackupModal()">💾</button>
       <button class="icon-btn" title="Schimbă mod Telefon / Desktop" onclick="app.showModePicker()">📱</button>
@@ -1320,7 +1382,7 @@
         </div>
       </aside>
 
-      <!-- Leaflet Map Canvas with Google Maps Tiles + Draggable Pins -->
+      <!-- Leaflet Map Canvas with Google Maps Tiles + Non-Overlapping Controls -->
       <div id="map"></div>
 
       <!-- Drag Notification Toast -->
@@ -1328,42 +1390,48 @@
         <span>📍</span> <span id="mapDragToastText">Poziția magazinului a fost actualizată!</span>
       </div>
 
-      <!-- Floating map stack tools (GPS & Nearest) -->
+      <!-- Floating map stack tools (Top Right, Clean separation from layer control in Top Left) -->
       <div class="map-fab-stack">
         <button class="map-action-bubble" id="mapGpsBtn" title="Activează/Dezactivează GPS" onclick="app.toggleGpsTracking()">📍</button>
         <button class="map-action-bubble" title="Focalizează pe cel mai apropiat magazin" onclick="app.findNearestStoreToGps()">🎯</button>
       </div>
 
-      <!-- Mobile Quick Card at bottom of screen -->
+      <!-- Mobile Quick Card at bottom of screen (Hidden by default, displayed ONLY when clicking a store) -->
       <div class="mobile-quick-card" id="mobileQuickCard">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
           <div>
             <div style="font-size: 11px; font-weight: 700; color: var(--primary);" id="mqcOrder">OPRIREA 1</div>
-            <div style="font-size: 15px; font-weight: 800;" id="mqcName">Selectează un magazin</div>
-            <div style="font-size: 12px; color: var(--text-muted);" id="mqcAddress">Apasă pe un pin pe hartă</div>
+            <div style="font-size: 15px; font-weight: 800;" id="mqcName">Nume Magazin</div>
+            <div style="font-size: 12px; color: var(--text-muted);" id="mqcAddress">Adresă magazin</div>
           </div>
-          <span class="badge badge-gray" id="mqcStatusBadge">Neînceput</span>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span class="badge badge-gray" id="mqcStatusBadge">Neînceput</span>
+            <button class="icon-btn" style="width:28px; height:28px; border-radius:50%; font-size:12px; font-weight:bold;" onclick="app.closeQuickCard()" title="Închide">✕</button>
+          </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 8px; margin-top: 8px;">
-          <button class="btn btn-waze" id="mqcWazeBtn" onclick="app.openActiveInWaze()">
-            🚗 Deschide în Waze
-          </button>
-          <button class="btn btn-secondary" onclick="app.goToNextStore()">
-            Următorul ➡️
-          </button>
-        </div>
+        <!-- Action buttons container (visible only when store is active) -->
+        <div id="mqcActionsWrapper">
+          <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 8px; margin-top: 8px;">
+            <button class="btn btn-waze" id="mqcWazeBtn" onclick="app.openActiveInWaze()">
+              🚗 Deschide în Waze
+            </button>
+            <button class="btn btn-secondary" onclick="app.goToNextStore()">
+              Următorul ➡️
+            </button>
+          </div>
 
-        <div style="display: flex; gap: 8px; margin-top: 8px;">
-          <button class="btn btn-success" onclick="app.markActiveAsResolved()">
-            ✓ Rezolvat
-          </button>
-          <button class="btn btn-danger" onclick="app.promptUnresolved()">
-            ✕ Nerezolvat
-          </button>
-          <button class="btn btn-secondary" style="flex:0.8;" onclick="app.openActiveStoreModal()">
-            ⚙️ Opțiuni
-          </button>
+          <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <button class="btn btn-success" onclick="app.markActiveAsResolved()">
+              ✓ Rezolvat
+            </button>
+            <button class="btn btn-danger" onclick="app.promptUnresolved()">
+              ✕ Nerezolvat
+            </button>
+            <button class="btn btn-secondary" style="flex:0.8;" onclick="app.openActiveStoreModal()">
+              ⚙️ Opțiuni
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -1590,10 +1658,11 @@
     /**
      * MERCHANDISER PRO APPLICATION - WEEK 1 (DAYS 1-5)
      * Features:
-     * - Drag & Drop Pin Relocation: markers are draggable with automatic coordinate saving.
-     * - Google Maps Tile Integration: Google Hybrid Satellite + Google Streets.
-     * - Week 1 Structure (Days 1, 2, 3, 4, 5).
-     * - Dynamic Numbered Product List with Thumbnail, Name, Price, Reorder, Edit, Delete.
+     * - Pin Lock / Unlock: pins are locked by default; toggle button in header unlocks drag-and-drop.
+     * - Non-overlapping map controls: Layer switcher at Top-Left, GPS/Target tools at Top-Right.
+     * - Space-saving Week 1 Dropdown: Click to pick Day 1-5 cleanly.
+     * - Mobile Quick Card displays ONLY when clicking a store, with an 'X' close button to view the full map.
+     * - Dynamic Numbered Product List (Thumbnail, Name, Price, Reorder, Delete).
      */
     
     // CANONICAL INITIAL DATASETS FOR WEEK 1 (DAYS 1-5)
@@ -1717,13 +1786,14 @@
         this.userGpsCircle = null;
         this.userGpsWatchId = null;
         this.userCoords = null;
+        this.isPinsLocked = localStorage.getItem("merch_pins_locked") !== "false"; // Default: true (Locked for safety)
         this.deviceMode = localStorage.getItem("merch_device_mode") || null;
         this.theme = localStorage.getItem("merch_theme") || "light";
         
         // Dynamic product data per day: { [storeId]: { sectionName: string, items: [ { id, name, price, photoUrl } ] } }
         this.storeProductsData = {};
         this.storeLogs = {};
-        this.activePhotoUploadTarget = null; // { storeId, productId }
+        this.activePhotoUploadTarget = null;
       }
 
       init() {
@@ -1731,15 +1801,16 @@
         this.loadDayData(this.currentDay);
         this.initMap();
         this.updateDayUI();
+        this.updatePinLockUI();
         this.renderSidebarList();
         this.renderReport();
         this.populateFabDropdown();
         this.checkDeviceMode();
         this.setupDraggableFab();
+        this.setupClickOutsideHandlers();
         
-        if (this.stores.length > 0) {
-          this.setActiveStore(this.stores[0].id, false);
-        }
+        // Hide quick card on initial launch
+        this.closeQuickCard();
       }
 
       loadDayData(dayKey) {
@@ -1779,8 +1850,34 @@
         }
       }
 
-      switchDay(dayKey) {
+      /* WEEK 1 DROPDOWN TOGGLE & SELECT */
+      toggleWeekDropdown(event) {
+        if (event) event.stopPropagation();
+        const menu = document.getElementById("weekDropdownMenu");
+        if (menu) menu.classList.toggle("show");
+      }
+
+      closeWeekDropdown() {
+        const menu = document.getElementById("weekDropdownMenu");
+        if (menu) menu.classList.remove("show");
+      }
+
+      selectDayFromMenu(dayKey) {
+        this.closeWeekDropdown();
         if (this.currentDay === dayKey) return;
+        this.switchDay(dayKey);
+      }
+
+      setupClickOutsideHandlers() {
+        document.addEventListener("click", (e) => {
+          const container = document.querySelector(".week-dropdown-container");
+          if (container && !container.contains(e.target)) {
+            this.closeWeekDropdown();
+          }
+        });
+      }
+
+      switchDay(dayKey) {
         this.loadDayData(dayKey);
         this.updateDayUI();
         this.renderMapMarkers();
@@ -1788,70 +1885,80 @@
         this.renderSidebarList();
         this.renderReport();
         this.populateFabDropdown();
-        
-        if (this.stores.length > 0) {
-          this.setActiveStore(this.stores[0].id, false);
-        }
+        this.closeQuickCard();
       }
 
       updateDayUI() {
         const d = this.currentDay;
+        const dayMap = {
+          day1: { label: "Ziua 1 (20)", title: "Săptămâna 1 - Ziua 1 (20 Magazine)", desc: "Popești & Sector 4", dist: "~19.2 km", time: "~40-50 min" },
+          day2: { label: "Ziua 2 (19)", title: "Săptămâna 1 - Ziua 2 (19 Magazine)", desc: "Ilfov Sud-Vest & Sector 5", dist: "~40.3 km", time: "~60-75 min" },
+          day3: { label: "Ziua 3 (20)", title: "Săptămâna 1 - Ziua 3 (20 Magazine)", desc: "Chitila / Chiajna / Domnești / Sector 6", dist: "~44.4 km", time: "~65-80 min" },
+          day4: { label: "Ziua 4 (14)", title: "Săptămâna 1 - Ziua 4 (14 Magazine)", desc: "Giulești / Crângași / Militari / Drumul Taberei", dist: "~17.2 km", time: "~35-45 min" },
+          day5: { label: "Ziua 5 (19)", title: "Săptămâna 1 - Ziua 5 (19 Magazine)", desc: "Chiajna / Bragadiru / Sector 5 (Rahova)", dist: "~22.8 km", time: "~45-55 min" }
+        };
+
+        const info = dayMap[d] || dayMap.day1;
+        const activePill = document.getElementById("activeDayHeaderLabel");
+        if (activePill) activePill.textContent = info.label;
+
+        // Update menu items active class
         ["day1", "day2", "day3", "day4", "day5"].forEach(k => {
-          const btn = document.getElementById(`btn${k.charAt(0).toUpperCase() + k.slice(1)}`);
-          if (btn) btn.classList.toggle("active", d === k);
+          const item = document.getElementById(`btn${k.charAt(0).toUpperCase() + k.slice(1)}`);
+          if (item) item.classList.toggle("active", d === k);
         });
 
-        const originLabel = document.getElementById("routeOriginStatus");
         const sidebarTitle = document.getElementById("sidebarTitle");
         const sidebarDesc = document.getElementById("sidebarRouteDesc");
         const repHeading = document.getElementById("reportMainHeading");
         const repSub = document.getElementById("reportSubHeading");
 
-        if (d === "day1") {
-          originLabel.textContent = "Săptămâna 1 | Start: Brănești (A2) → Sector 4 & Popești";
-          sidebarTitle.textContent = "Săptămâna 1 - Ziua 1 (20 Magazine)";
+        if (sidebarTitle) sidebarTitle.textContent = info.title;
+        if (sidebarDesc) {
           sidebarDesc.innerHTML = `
-            <div>🛣️ <strong>Ruta Optimizată:</strong> Plecare din <strong>Brănești pe A2</strong>, vizitare Popești $\rightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil pe Splai / Pallady / A2).</div>
-            <div class="route-stats-row"><span>Distanță: ~19.2 km</span><span>Timp condus: ~40-50 min</span></div>
+            <div>🛣️ <strong>Ruta Optimizată:</strong> Plecare din <strong>Brănești pe A2</strong>, vizitare ${info.desc} și finalizare la punctul cel mai rapid de retur spre casă.</div>
+            <div class="route-stats-row"><span>Distanță: ${info.dist}</span><span>Timp condus: ${info.time}</span></div>
           `;
-          repHeading.textContent = "📋 Raport Verificare Teren - Săptămâna 1 / Ziua 1";
-          repSub.textContent = "Monitorizare status vizite, produse, prețuri și fotografii pentru cele 20 de magazine.";
-        } else if (d === "day2") {
-          originLabel.textContent = "Săptămâna 1 | Start: Brănești (A2) → Ilfov Sud-Vest & Sector 5";
-          sidebarTitle.textContent = "Săptămâna 1 - Ziua 2 (19 Magazine)";
-          sidebarDesc.innerHTML = `
-            <div>🛣️ <strong>Ruta Optimizată:</strong> Plecare din <strong>Brănești pe A2</strong>, vizitare Comuna Berceni $\rightarrow$ Vidra $\rightarrow$ Jilava $\rightarrow$ Măgurele $\rightarrow$ Bragadiru $\rightarrow$ Sector 5 și final la <strong>Mega Image Regina Maria</strong> (retur facil pe B-dul Unirii / Pallady / A2).</div>
-            <div class="route-stats-row"><span>Distanță: ~40.3 km</span><span>Timp condus: ~60-75 min</span></div>
-          `;
-          repHeading.textContent = "📋 Raport Verificare Teren - Săptămâna 1 / Ziua 2";
-          repSub.textContent = "Monitorizare status vizite, produse, prețuri și fotografii pentru cele 19 magazine.";
-        } else if (d === "day3") {
-          originLabel.textContent = "Săptămâna 1 | Start: Brănești (A2) → Chitila / Chiajna / Domnești / Sector 6";
-          sidebarTitle.textContent = "Săptămâna 1 - Ziua 3 (20 Magazine)";
-          sidebarDesc.innerHTML = `
-            <div>🛣️ <strong>Ruta Optimizată:</strong> Plecare din <strong>Brănești pe A2 / Centura Nord</strong>, vizitare Chitila $\rightarrow$ Chiajna $\rightarrow$ Ciorogârla $\rightarrow$ Domnești $\rightarrow$ Sector 6 și final la <strong>Profi Brașov</strong> (retur facil pe Răzoare / Splai / A2).</div>
-            <div class="route-stats-row"><span>Distanță: ~44.4 km</span><span>Timp condus: ~65-80 min</span></div>
-          `;
-          repHeading.textContent = "📋 Raport Verificare Teren - Săptămâna 1 / Ziua 3";
-          repSub.textContent = "Monitorizare status vizite, produse, prețuri și fotografii pentru cele 20 de magazine.";
-        } else if (d === "day4") {
-          originLabel.textContent = "Săptămâna 1 | Start: Brănești (A2) → Giulești / Crângași / Militari / Drumul Taberei";
-          sidebarTitle.textContent = "Săptămâna 1 - Ziua 4 (14 Magazine)";
-          sidebarDesc.innerHTML = `
-            <div>🛣️ <strong>Ruta Optimizată:</strong> Plecare din <strong>Brănești pe A2</strong>, vizitare Giulești $\rightarrow$ Crângași $\rightarrow$ Militari $\rightarrow$ Drumul Taberei și final la <strong>Mega Image Timișoara 18</strong> (retur facil pe Răzoare / Unirii / Pallady / A2).</div>
-            <div class="route-stats-row"><span>Distanță: ~17.2 km</span><span>Timp condus: ~35-45 min</span></div>
-          `;
-          repHeading.textContent = "📋 Raport Verificare Teren - Săptămâna 1 / Ziua 4";
-          repSub.textContent = "Monitorizare status vizite, produse, prețuri și fotografii pentru cele 14 magazine.";
+        }
+        if (repHeading) repHeading.textContent = `📋 Raport Verificare Teren - ${info.title}`;
+        if (repSub) repSub.textContent = `Monitorizare status vizite, produse, prețuri și fotografii pentru magazinele alocate.`;
+      }
+
+      /* PIN LOCK & UNLOCK SYSTEM */
+      togglePinLock() {
+        this.isPinsLocked = !this.isPinsLocked;
+        localStorage.setItem("merch_pins_locked", this.isPinsLocked);
+        this.updatePinLockUI();
+
+        // Update draggable property on all active markers immediately
+        Object.values(this.markers).forEach(marker => {
+          if (marker.dragging) {
+            if (this.isPinsLocked) {
+              marker.dragging.disable();
+            } else {
+              marker.dragging.enable();
+            }
+          }
+        });
+
+        if (this.isPinsLocked) {
+          this.showDragToast("🔒 Pinii au fost BLOCAȚI (nu se pot muta accidental la zoom/pan).");
         } else {
-          originLabel.textContent = "Săptămâna 1 | Start: Brănești (A2) → Chiajna / Bragadiru / Sector 5";
-          sidebarTitle.textContent = "Săptămâna 1 - Ziua 5 (19 Magazine)";
-          sidebarDesc.innerHTML = `
-            <div>🛣️ <strong>Ruta Optimizată:</strong> Plecare din <strong>Brănești pe A2 / DNCB Nord</strong>, vizitare Chiajna $\rightarrow$ Bragadiru $\rightarrow$ Rahova/Mărgeanului $\rightarrow$ 13 Septembrie și final la <strong>Profi Libertății</strong> (retur facil pe B-dul Libertății / Unirii / Splai / A2).</div>
-            <div class="route-stats-row"><span>Distanță: ~22.8 km</span><span>Timp condus: ~45-55 min</span></div>
-          `;
-          repHeading.textContent = "📋 Raport Verificare Teren - Săptămâna 1 / Ziua 5";
-          repSub.textContent = "Monitorizare status vizite, produse, prețuri și fotografii pentru cele 19 magazine.";
+          this.showDragToast("🔓 Pinii au fost DEBLOCAȚI! Poți trage acum markerul pentru a-i fixa poziția.");
+        }
+      }
+
+      updatePinLockUI() {
+        const btn = document.getElementById("headerLockBtn");
+        if (!btn) return;
+        if (this.isPinsLocked) {
+          btn.innerHTML = "🔒";
+          btn.title = "Pini Blocați împotriva mutării accidentale (Apasă pt a debloca)";
+          btn.classList.remove("unlocked-btn");
+        } else {
+          btn.innerHTML = "🔓";
+          btn.title = "Pini Deblocați (Mod editare activ - apasă pt a bloca)";
+          btn.classList.add("unlocked-btn");
         }
       }
 
@@ -1876,13 +1983,10 @@
 
       applyDeviceMode(mode) {
         const sidebar = document.getElementById("mapSidebar");
-        const quickCard = document.getElementById("mobileQuickCard");
         if (mode === "desktop") {
           if (sidebar) sidebar.style.display = "flex";
-          if (quickCard) quickCard.style.display = "none";
         } else {
           if (sidebar) sidebar.style.display = "none";
-          if (quickCard) quickCard.style.display = "block";
         }
         if (this.map) {
           setTimeout(() => this.map.invalidateSize(), 200);
@@ -1915,9 +2019,8 @@
         }
       }
 
-      /* GOOGLE MAPS TILE INTEGRATION & LEAFLET SETUP */
+      /* GOOGLE MAPS TILES + NON-OVERLAPPING CONTROLS */
       initMap() {
-        // Google Maps Layers (No API key needed, high resolution Satellite & Streets)
         const googleHybrid = L.tileLayer('https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
           maxZoom: 20,
           subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
@@ -1935,21 +2038,21 @@
           attribution: '&copy; OpenStreetMap contributors'
         });
 
-        // Initialize with Google Hybrid as default
         this.map = L.map('map', { 
           zoomControl: false,
           layers: [googleHybrid] 
         }).setView([44.420, 26.040], 12);
 
-        L.control.zoom({ position: 'topright' }).addTo(this.map);
+        // Zoom Control placed cleanly on bottom-left to avoid collisions
+        L.control.zoom({ position: 'bottomleft' }).addTo(this.map);
 
-        // Map layer switcher (Google Maps Satellite / Google Maps Streets / OSM)
+        // Map Layers Control placed on TOP-LEFT (leaving Top-Right completely free for GPS tools)
         const baseMaps = {
-          "🛰️ Google Maps Hibrid (Satelit)": googleHybrid,
-          "🗺️ Google Maps Străzi": googleStreets,
+          "🛰️ Google Satelit": googleHybrid,
+          "🗺️ Google Străzi": googleStreets,
           "🌍 OpenStreetMap": osmStandard
         };
-        L.control.layers(baseMaps, null, { position: 'topright' }).addTo(this.map);
+        L.control.layers(baseMaps, null, { position: 'topleft' }).addTo(this.map);
 
         this.renderMapMarkers();
         this.drawRoutePolyline();
@@ -1978,7 +2081,7 @@
         });
       }
 
-      /* RENDER PINS WITH DRAG & DROP COORD FIXING */
+      /* RENDER PINS WITH DRAG & DROP LOCK/UNLOCK LOGIC */
       renderMapMarkers() {
         Object.values(this.markers).forEach(m => this.map.removeLayer(m));
         this.markers = {};
@@ -1989,16 +2092,16 @@
           const originalIndex = this.stores.findIndex(s => s.id === store.id);
           const icon = this.createPinIcon(store, originalIndex);
           
-          // DRAGGABLE MARKER: Allows user to move and permanently fix pin on map!
+          // Marker draggable state obeys this.isPinsLocked
           const marker = L.marker([store.lat, store.lng], { 
             icon: icon,
-            draggable: true 
+            draggable: !this.isPinsLocked 
           }).addTo(this.map);
 
-          // Click opens store details
-          marker.on('click', () => this.setActiveStore(store.id, true));
+          // Click opens store details & quick card cleanly
+          marker.on('click', () => this.setActiveStore(store.id, false));
 
-          // Dragend saves exact new coordinates to localStorage!
+          // Dragend saves exact new coordinates to localStorage
           marker.on('dragend', (e) => {
             const newPos = e.target.getLatLng();
             store.lat = parseFloat(newPos.lat.toFixed(6));
@@ -2075,7 +2178,8 @@
         });
       }
 
-      setActiveStore(id, openSheet = true) {
+      /* SELECT STORE & DISPLAY QUICK CARD ONLY UPON CLICK */
+      setActiveStore(id, openSheet = false) {
         this.activeStoreId = id;
         const store = this.stores.find(s => s.id === id);
         if (!store) return;
@@ -2089,8 +2193,10 @@
           }
         });
 
-        this.map.panTo([store.lat, store.lng], { animate: true, duration: 0.5 });
+        this.map.panTo([store.lat, store.lng], { animate: true, duration: 0.4 });
 
+        // Update & Show Mobile Quick Card smoothly
+        const quickCard = document.getElementById("mobileQuickCard");
         const mqcOrder = document.getElementById("mqcOrder");
         const mqcName = document.getElementById("mqcName");
         const mqcAddress = document.getElementById("mqcAddress");
@@ -2113,6 +2219,11 @@
           }
         }
 
+        // Make quick card visible when a store is active
+        if (quickCard) {
+          quickCard.style.display = "block";
+        }
+
         document.querySelectorAll('.store-card').forEach(card => {
           card.classList.toggle('active', card.dataset.id === id);
         });
@@ -2121,9 +2232,15 @@
         if (fabSelect) fabSelect.value = id;
         this.renderFabProductsForm();
 
-        if (openSheet && (this.deviceMode === "mobile" || window.innerWidth < 768)) {
+        // If explicit modal open requested (e.g. from Options button)
+        if (openSheet) {
           this.openStoreModal(store, index, log);
         }
+      }
+
+      closeQuickCard() {
+        const quickCard = document.getElementById("mobileQuickCard");
+        if (quickCard) quickCard.style.display = "none";
       }
 
       openActiveStoreModal() {
@@ -2170,8 +2287,8 @@
           if (this.userGpsCircle) this.map.removeLayer(this.userGpsCircle);
           this.userGpsMarker = null;
           this.userGpsCircle = null;
-          headerBtn.classList.remove("active-gps");
-          mapBtn.classList.remove("active-gps");
+          headerBtn.classList.remove("active-btn");
+          mapBtn.classList.remove("active-btn");
           alert("📍 Urmărire GPS dezactivată.");
           return;
         }
@@ -2181,8 +2298,8 @@
           return;
         }
 
-        headerBtn.classList.add("active-gps");
-        mapBtn.classList.add("active-gps");
+        headerBtn.classList.add("active-btn");
+        mapBtn.classList.add("active-btn");
 
         this.userGpsWatchId = navigator.geolocation.watchPosition(
           (pos) => {
@@ -2208,8 +2325,8 @@
           (err) => {
             console.warn("GPS error:", err);
             alert("Nu am putut obține locația GPS. Te rugăm să permiți accesul la locație în Safari / Browser.");
-            headerBtn.classList.remove("active-gps");
-            mapBtn.classList.remove("active-gps");
+            headerBtn.classList.remove("active-btn");
+            mapBtn.classList.remove("active-btn");
           },
           { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
         );
@@ -2264,8 +2381,10 @@
         });
 
         if (closest) {
-          this.setActiveStore(closest.id, true);
-          alert(`🎯 Cel mai apropiat magazin rămas:\n*${closest.name}*\nDistanță directă: ~${minDist.toFixed(2)} km`);
+          this.setActiveStore(closest.id, false);
+          alert(`🎯 Cel mai apropiat magazin rămas:
+*${closest.name}*
+Distanță directă: ~${minDist.toFixed(2)} km`);
         }
       }
 
@@ -2379,7 +2498,7 @@
         const currentIndex = this.stores.findIndex(s => s.id === this.activeStoreId);
         if (currentIndex < this.stores.length - 1) {
           const nextStore = this.stores[currentIndex + 1];
-          this.setActiveStore(nextStore.id, true);
+          this.setActiveStore(nextStore.id, false);
         } else {
           let exitPoint = "Timpuri Noi / Splai / A2";
           if (this.currentDay === "day2") exitPoint = "Regina Maria / B-dul Unirii / A2";
@@ -2487,7 +2606,7 @@
             </div>
           `;
 
-          card.onclick = () => this.setActiveStore(store.id, true);
+          card.onclick = () => this.setActiveStore(store.id, false);
           container.appendChild(card);
         });
 
@@ -2496,7 +2615,7 @@
         if (badge) badge.textContent = `${totalResolved}/${this.stores.length} Vizitate`;
       }
 
-      /* DYNAMIC PRODUCTS LIST & PHOTO FORM (NEW SIMPLIFIED CRUD) */
+      /* DYNAMIC PRODUCTS LIST & PHOTO FORM */
       toggleFabWindow() {
         const win = document.getElementById("fabWindow");
         win.classList.toggle("active");
@@ -2647,7 +2766,7 @@
       deleteProductRow(storeId, itemId) {
         const data = this.getOrCreateStoreData(storeId);
         if (data.items.length === 1 && !data.items[0].name && !data.items[0].photoUrl) {
-          return; // Keep at least one blank row
+          return;
         }
         data.items = data.items.filter(it => it.id !== itemId);
         if (data.items.length === 0) {
@@ -2769,7 +2888,6 @@
             pending++;
           }
 
-          // Format items list
           let productsHtml = "-";
           const validItems = data.items.filter(it => it.name || it.price || it.photoUrl);
           if (validItems.length > 0) {
@@ -2886,7 +3004,7 @@
 
       exportFullBackup() {
         const backupData = {
-          version: "3.0_week1",
+          version: "3.2_week1",
           exportDate: new Date().toISOString(),
           day1_stores: localStorage.getItem("merch_stores_day1"),
           day1_logs: localStorage.getItem("merch_logs_day1"),
@@ -2949,7 +3067,7 @@
           this.renderMapMarkers();
           this.renderReport();
           this.renderFabProductsForm();
-          this.setActiveStore(this.stores[0].id, false);
+          this.closeQuickCard();
           alert(`✓ Progresul pentru ${dayName} a fost resetat cu succes!`);
         }
       }
