@@ -10,7 +10,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Merchandiser Pro" />
   <meta name="theme-color" content="#2563eb" />
-  <meta name="description" content="Aplicație profesională de planificare rută, colectare date la raft și verificare pe teren pentru merchandiseri." />
   
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -89,7 +88,7 @@
       overflow: hidden;
     }
 
-    /* Top Navigation Bar */
+    /* Header & Navigation */
     header {
       background-color: var(--card-bg);
       border-bottom: 1px solid var(--border);
@@ -99,7 +98,7 @@
       justify-content: space-between;
       z-index: 1000;
       flex-shrink: 0;
-      gap: 6px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
@@ -135,28 +134,46 @@
       display: block;
     }
 
-    /* Day Switcher Component (5 Days) */
-    .day-selector-container {
+    /* Week & Day Navigation Hierarchy */
+    .week-nav-wrapper {
       display: flex;
       align-items: center;
-      gap: 3px;
+      gap: 6px;
       background-color: var(--gray-100);
-      padding: 3px;
+      padding: 3px 6px;
       border-radius: 10px;
       overflow-x: auto;
       max-width: 100%;
       scrollbar-width: none;
     }
-    .day-selector-container::-webkit-scrollbar { display: none; }
+    .week-nav-wrapper::-webkit-scrollbar { display: none; }
+
+    .week-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 4px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .day-selector-pills {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
 
     .day-btn {
-      padding: 6px 8px;
+      padding: 5px 9px;
       font-size: 11px;
       font-weight: 700;
       border: none;
       background: transparent;
       color: var(--text-muted);
-      border-radius: 7px;
+      border-radius: 6px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -235,7 +252,6 @@
     .badge-success { background: var(--success-light); color: var(--success); }
     .badge-danger { background: var(--danger-light); color: var(--danger); }
     .badge-gray { background: var(--gray-100); color: var(--text-muted); }
-    .badge-purple { background: var(--purple-light); color: var(--purple); }
 
     /* Filter Bar */
     .filter-scroll-row {
@@ -378,7 +394,6 @@
       border-color: var(--success);
       background-color: #f0fdf4;
     }
-
     [data-theme="dark"] .store-card.completed {
       background-color: #064e3b33;
     }
@@ -387,7 +402,6 @@
       border-color: var(--danger);
       background-color: #fef2f2;
     }
-
     [data-theme="dark"] .store-card.unresolved {
       background-color: #7f1d1d33;
     }
@@ -436,7 +450,7 @@
       line-height: 1.3;
     }
 
-    /* Map floating control overlay buttons */
+    /* Map floating control overlay stack */
     .map-fab-stack {
       position: absolute;
       top: 14px;
@@ -463,6 +477,30 @@
     }
     .map-action-bubble:hover { transform: scale(1.06); }
     .map-action-bubble.active-gps { background: var(--primary); color: white; }
+
+    /* Drag notification toast */
+    .map-toast-alert {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.9);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      z-index: 2000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      display: none;
+      align-items: center;
+      gap: 6px;
+      animation: fadeInDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translate(-50%, -10px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
 
     /* Mobile Quick Bar at Map Bottom */
     .mobile-quick-card {
@@ -493,10 +531,7 @@
       align-items: flex-end;
       justify-content: center;
     }
-
-    .modal-overlay.active {
-      display: flex;
-    }
+    .modal-overlay.active { display: flex; }
 
     .action-sheet {
       background: var(--card-bg);
@@ -557,7 +592,7 @@
       gap: 10px;
     }
 
-    /* Common Buttons (Min 44px for touch on iPhone 15 Pro Max) */
+    /* Common Buttons */
     .btn {
       min-height: 46px;
       padding: 10px 16px;
@@ -574,14 +609,10 @@
       text-decoration: none;
     }
 
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
+    .btn-primary { background: var(--primary); color: white; }
     .btn-primary:hover { background: var(--primary-hover); }
 
     .btn-waze {
-      background: #00d8ff;
       background: linear-gradient(135deg, #00c6ff, #0072ff);
       color: white;
       font-weight: 700;
@@ -590,19 +621,8 @@
     }
     .btn-waze:hover { opacity: 0.95; }
 
-    .btn-gmaps {
-      background: #34a853;
-      color: white;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .btn-apple {
-      background: #1e293b;
-      color: white;
-      font-size: 13px;
-      font-weight: 600;
-    }
+    .btn-gmaps { background: #34a853; color: white; font-size: 13px; font-weight: 600; }
+    .btn-apple { background: #1e293b; color: white; font-size: 13px; font-weight: 600; }
 
     .btn-secondary {
       background: var(--gray-100);
@@ -611,18 +631,10 @@
     }
     .btn-secondary:hover { background: var(--gray-200); }
 
-    .btn-success {
-      background: var(--success);
-      color: white;
-      flex: 1;
-    }
+    .btn-success { background: var(--success); color: white; flex: 1; }
     .btn-success:hover { background: var(--success-dark); }
 
-    .btn-danger {
-      background: var(--danger);
-      color: white;
-      flex: 1;
-    }
+    .btn-danger { background: var(--danger); color: white; flex: 1; }
     .btn-danger:hover { background: var(--danger-dark); }
 
     .btn-sm {
@@ -632,7 +644,7 @@
       border-radius: 8px;
     }
 
-    /* Floating Messenger Bubble FAB - Draggable Anywhere */
+    /* Draggable Messenger FAB */
     .floating-fab {
       position: fixed;
       bottom: 100px;
@@ -678,14 +690,14 @@
       pointer-events: none;
     }
 
-    /* Floating Window / Messenger Form */
+    /* New Dynamic Product List Form Window */
     .fab-window {
       position: fixed;
       bottom: 90px;
       right: 20px;
-      width: 390px;
-      max-width: calc(100vw - 28px);
-      max-height: 600px;
+      width: 410px;
+      max-width: calc(100vw - 24px);
+      max-height: 640px;
       background: var(--card-bg);
       border-radius: 16px;
       border: 1px solid var(--border);
@@ -696,10 +708,7 @@
       overflow: hidden;
       animation: popIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-
-    .fab-window.active {
-      display: flex;
-    }
+    .fab-window.active { display: flex; }
 
     @keyframes popIn {
       from { transform: scale(0.85); opacity: 0; }
@@ -734,29 +743,29 @@
     .fab-close-btn:hover { opacity: 1; }
 
     .fab-window-body {
-      padding: 14px 16px;
+      padding: 14px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 11px;
+      gap: 12px;
       flex: 1;
     }
 
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 4px;
     }
 
     .form-label {
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text);
     }
 
     .form-control {
-      min-height: 40px;
-      padding: 8px 12px;
+      min-height: 38px;
+      padding: 6px 10px;
       border: 1px solid var(--border);
       border-radius: 8px;
       background: var(--bg);
@@ -766,77 +775,127 @@
       outline: none;
       transition: border-color 0.2s;
     }
+    .form-control:focus { border-color: var(--primary); }
 
-    .form-control:focus {
-      border-color: var(--primary);
-    }
-
-    /* Photo Slots Grid (Before / After / Promo) */
-    .photo-slots-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    /* Dynamic Products List Container */
+    .products-dynamic-list {
+      display: flex;
+      flex-direction: column;
       gap: 8px;
+      margin-top: 4px;
     }
 
-    .photo-slot-card {
-      border: 2px dashed var(--border);
+    .product-row-item {
+      background: var(--gray-50);
+      border: 1px solid var(--border);
       border-radius: 10px;
       padding: 10px;
-      text-align: center;
-      background: var(--gray-50);
-      cursor: pointer;
-      transition: all 0.2s;
+      display: flex;
+      gap: 10px;
+      align-items: center;
       position: relative;
+      transition: all 0.2s;
     }
-    .photo-slot-card:hover {
+
+    .product-row-item:hover {
       border-color: var(--primary);
-      background: var(--primary-light);
-    }
-    .photo-slot-card.has-photo {
-      border-style: solid;
-      border-color: var(--success);
-      padding: 4px;
     }
 
-    .photo-slot-img {
-      width: 100%;
-      height: 75px;
-      object-fit: cover;
-      border-radius: 6px;
-    }
-
-    /* Shelf metrics switches */
-    .switch-row {
+    .product-index-badge {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-size: 11px;
+      font-weight: 800;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      background: var(--gray-50);
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
+      justify-content: center;
+      flex-shrink: 0;
     }
 
-    .switch {
+    .product-thumb-container {
+      width: 52px;
+      height: 52px;
+      border-radius: 8px;
+      border: 1px dashed var(--gray-300);
+      background: var(--card-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
       position: relative;
-      display: inline-block;
-      width: 44px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .product-thumb-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-thumb-container .thumb-placeholder {
+      font-size: 18px;
+      color: var(--gray-400);
+    }
+
+    .product-fields-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .product-input-name {
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 8px;
+      background: var(--card-bg);
+      color: var(--text);
+      outline: none;
+      width: 100%;
+    }
+
+    .product-input-price {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 8px;
+      background: var(--card-bg);
+      outline: none;
+      width: 100%;
+    }
+
+    .product-actions-col {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .action-icon-btn {
+      width: 24px;
       height: 24px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--text-muted);
+      transition: all 0.2s;
     }
-    .switch input { opacity: 0; width: 0; height: 0; }
-    .slider {
-      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-      background-color: var(--gray-300);
-      transition: .3s;
-      border-radius: 24px;
-    }
-    .slider:before {
-      position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
-      background-color: white;
-      transition: .3s;
-      border-radius: 50%;
-    }
-    input:checked + .slider { background-color: var(--danger); }
-    input:checked + .slider:before { transform: translateX(20px); }
+    .action-icon-btn:hover { background: var(--gray-200); color: var(--text); }
+    .action-icon-btn.delete-btn:hover { background: var(--danger-light); color: var(--danger); border-color: var(--danger); }
 
     /* Tab: Raport Verificare Teren */
     #reportView {
@@ -846,10 +905,7 @@
       padding: 20px;
       display: none;
     }
-
-    #reportView.active {
-      display: flex;
-    }
+    #reportView.active { display: flex; }
 
     .report-container {
       max-width: 1100px;
@@ -916,7 +972,6 @@
       justify-content: center;
       font-size: 20px;
     }
-
     .stat-icon-blue { background: var(--primary-light); color: var(--primary); }
     .stat-icon-green { background: var(--success-light); color: var(--success); }
     .stat-icon-red { background: var(--danger-light); color: var(--danger); }
@@ -971,13 +1026,8 @@
       vertical-align: middle;
     }
 
-    table.report-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    table.report-table tr:hover td {
-      background-color: var(--gray-50);
-    }
+    table.report-table tr:last-child td { border-bottom: none; }
+    table.report-table tr:hover td { background-color: var(--gray-50); }
 
     /* Modal Chooser on First Run */
     .mode-picker-modal {
@@ -1025,13 +1075,11 @@
       cursor: pointer;
       transition: all 0.2s;
     }
-
     .mode-btn:hover {
       border-color: var(--primary);
       background: var(--primary-light);
       transform: translateY(-2px);
     }
-
     .mode-btn-icon { font-size: 32px; }
     .mode-btn-title { font-size: 14px; font-weight: 700; }
     .mode-btn-desc { font-size: 11px; color: var(--text-muted); }
@@ -1188,7 +1236,7 @@
     </div>
   </div>
 
-  <!-- Header / Navigation Bar with 5-Day Selector -->
+  <!-- Header with Week 1 & Days 1-5 -->
   <header>
     <div class="brand">
       <div class="brand-logo">M</div>
@@ -1198,23 +1246,16 @@
       </div>
     </div>
 
-    <!-- Day Selector Pills (Ziua 1, Ziua 2, Ziua 3, Ziua 4, Ziua 5) -->
-    <div class="day-selector-container">
-      <button class="day-btn active" id="btnDay1" onclick="app.switchDay('day1')">
-        📅 Ziua 1 (20)
-      </button>
-      <button class="day-btn" id="btnDay2" onclick="app.switchDay('day2')">
-        📅 Ziua 2 (19)
-      </button>
-      <button class="day-btn" id="btnDay3" onclick="app.switchDay('day3')">
-        📅 Ziua 3 (20)
-      </button>
-      <button class="day-btn" id="btnDay4" onclick="app.switchDay('day4')">
-        📅 Ziua 4 (14)
-      </button>
-      <button class="day-btn" id="btnDay5" onclick="app.switchDay('day5')">
-        📅 Ziua 5 (19)
-      </button>
+    <!-- Week 1 Navigation with Day Pills -->
+    <div class="week-nav-wrapper">
+      <span class="week-tag">Săptămâna 1</span>
+      <div class="day-selector-pills">
+        <button class="day-btn active" id="btnDay1" onclick="app.switchDay('day1')">Ziua 1 (20)</button>
+        <button class="day-btn" id="btnDay2" onclick="app.switchDay('day2')">Ziua 2 (19)</button>
+        <button class="day-btn" id="btnDay3" onclick="app.switchDay('day3')">Ziua 3 (20)</button>
+        <button class="day-btn" id="btnDay4" onclick="app.switchDay('day4')">Ziua 4 (14)</button>
+        <button class="day-btn" id="btnDay5" onclick="app.switchDay('day5')">Ziua 5 (19)</button>
+      </div>
     </div>
 
     <!-- View Tabs -->
@@ -1244,7 +1285,7 @@
       <aside class="map-sidebar" id="mapSidebar">
         <div class="sidebar-header">
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h2 id="sidebarTitle">Magazine Ziua 1</h2>
+            <h2 id="sidebarTitle">Magazine Săptămâna 1 - Ziua 1</h2>
             <span class="badge badge-primary" id="sidebarProgressBadge">0/20 Vizitate</span>
           </div>
 
@@ -1279,8 +1320,13 @@
         </div>
       </aside>
 
-      <!-- Leaflet Map Canvas -->
+      <!-- Leaflet Map Canvas with Google Maps Tiles + Draggable Pins -->
       <div id="map"></div>
+
+      <!-- Drag Notification Toast -->
+      <div class="map-toast-alert" id="mapDragToast">
+        <span>📍</span> <span id="mapDragToastText">Poziția magazinului a fost actualizată!</span>
+      </div>
 
       <!-- Floating map stack tools (GPS & Nearest) -->
       <div class="map-fab-stack">
@@ -1327,8 +1373,8 @@
       <div class="report-container">
         <div class="report-header">
           <div class="report-title-box">
-            <h2 id="reportMainHeading">📋 Raport Verificare Teren</h2>
-            <p id="reportSubHeading">Monitorizare status vizite, prețuri, promoții, Out of Stock și fotografii pe teren.</p>
+            <h2 id="reportMainHeading">📋 Raport Verificare Teren - Săptămâna 1</h2>
+            <p id="reportSubHeading">Monitorizare status vizite, produse, prețuri și fotografii pe teren.</p>
           </div>
           <div class="report-actions">
             <button class="btn btn-primary" onclick="app.copyWhatsAppReport()">
@@ -1388,9 +1434,8 @@
                   <th>Magazin & Adresă</th>
                   <th>Ora Vizitei</th>
                   <th>Status</th>
-                  <th>Observații / OOS</th>
-                  <th>Prețuri & Fețe Raft</th>
-                  <th>Foto Înainte / După / Raft</th>
+                  <th>Secțiune Raft</th>
+                  <th>Produse Înregistrate (Poză, Denumire, Preț)</th>
                 </tr>
               </thead>
               <tbody id="reportBodyRows">
@@ -1404,18 +1449,19 @@
   </main>
 
   <!-- Floating Messenger Bubble FAB (Draggable Anywhere) -->
-  <div class="floating-fab" id="floatingFab" title="Trage oriunde sau apasă pentru Preț & Poze">
+  <div class="floating-fab" id="floatingFab" title="Trage oriunde sau apasă pentru Secțiune, Produse & Poze">
     <div style="font-size: 24px; pointer-events: none;">📸</div>
     <div class="fab-badge" id="fabPhotosBadge" style="display: none;">0</div>
   </div>
 
-  <!-- Floating Window Widget (Messenger Style Form) -->
+  <!-- Dynamic Product List & Photos Form Window (Messenger Style) -->
   <div class="fab-window" id="fabWindow">
     <div class="fab-window-header" id="fabWindowHeader">
-      <h3><span>📝</span> Formular Preț, Raft & Poze</h3>
+      <h3><span>📝</span> Secțiune Nume & Listă Produse</h3>
       <button class="fab-close-btn" onclick="app.closeFabWindow()">&times;</button>
     </div>
     <div class="fab-window-body">
+      <!-- Store Selector -->
       <div class="form-group">
         <label class="form-label">Magazin Curent:</label>
         <select class="form-control" id="fabStoreSelect" onchange="app.onFabStoreChange()">
@@ -1423,104 +1469,30 @@
         </select>
       </div>
 
-      <!-- Before / After Photo Upload Section with Auto-Compression -->
+      <!-- Section Name Input -->
       <div class="form-group">
-        <label class="form-label">Fotografii Raft (Compresie Automată Inteligentă):</label>
-        <div class="photo-slots-grid">
-          <div class="photo-slot-card" id="slotBeforeCard" onclick="app.triggerPhotoUpload('before')">
-            <span style="font-size: 20px;">📸</span>
-            <div style="font-size: 11px; font-weight: 700;">Foto ÎNAINTE</div>
-            <div style="font-size: 9px; color: var(--text-muted);">Sosire / Raft inițial</div>
-            <div id="slotBeforePreview"></div>
-          </div>
-          <div class="photo-slot-card" id="slotAfterCard" onclick="app.triggerPhotoUpload('after')">
-            <span style="font-size: 20px;">✨</span>
-            <div style="font-size: 11px; font-weight: 700;">Foto DUPĂ</div>
-            <div style="font-size: 9px; color: var(--text-muted);">Plecare / Aranjat</div>
-            <div id="slotAfterPreview"></div>
-          </div>
-        </div>
-        <input type="file" id="fabPhotoInput" accept="image/*" capture="environment" style="display: none;" onchange="app.handlePhotoFileSelected(event)" />
+        <label class="form-label">Nume Secțiune / Categorie Raft:</label>
+        <input type="text" class="form-control" id="fabSectionName" placeholder="Ex: Raft 1, Băuturi Răcoritoare, Promoție Capăt Raft" oninput="app.onSectionNameChange()" />
       </div>
 
-      <!-- Merchandiser Key Shelf Metrics -->
-      <div class="switch-row">
-        <div>
-          <strong style="font-size: 12px;">Lipsă Stoc la Raft (OOS):</strong>
-          <div style="font-size: 10px; color: var(--text-muted);">Bifează dacă produsul e epuizat</div>
-        </div>
-        <label class="switch">
-          <input type="checkbox" id="fabOosSwitch">
-          <span class="slider"></span>
-        </label>
-      </div>
-
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-        <div class="form-group">
-          <label class="form-label">Număr Fețe (Facings):</label>
-          <input type="number" min="0" class="form-control" id="fabFacingsCount" placeholder="Ex: 3 fețe" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Poziționare Raft:</label>
-          <select class="form-control" id="fabShelfPosition">
-            <option value="Nivelul Ochilor">Nivelul Ochilor (Top)</option>
-            <option value="Nivelul Mâinilor">Nivelul Mâinilor</option>
-            <option value="Nivelul de Jos">Nivelul de Jos</option>
-            <option value="Cap de Raft">Cap de Raft (Endcap)</option>
-            <option value="Palet Promo">Palet / Insulă Promo</option>
-          </select>
-        </div>
-      </div>
-
+      <!-- Dynamic Numbered Products List -->
       <div class="form-group">
-        <label class="form-label">Categorie Produs:</label>
-        <select class="form-control" id="fabCategorySelect">
-          <option value="Băuturi Răcoritoare">Băuturi Răcoritoare</option>
-          <option value="Bere & Alcool">Bere & Alcool</option>
-          <option value="Dulciuri & Ciocolată">Dulciuri & Ciocolată</option>
-          <option value="Cafea & Ceai">Cafea & Ceai</option>
-          <option value="Snacks & Chipsuri">Snacks & Chipsuri</option>
-          <option value="Lactate & Brânzeturi">Lactate & Brânzeturi</option>
-          <option value="Detergenți & Menaj">Detergenți & Menaj</option>
-          <option value="Promoții Speciale (Capete de Raft)">Promoții Speciale</option>
-          <option value="Altele">Altele</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Nume / Cod EAN Produs:</label>
-        <div style="display: flex; gap: 6px;">
-          <input type="text" class="form-control" id="fabProductName" style="flex:1;" placeholder="Ex: 5941... sau Coca-Cola 2L" />
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+          <label class="form-label">Listă Produse & Poze (Numerotate 1, 2, 3...):</label>
+          <span style="font-size: 11px; color: var(--text-muted);" id="fabProductCountLabel">0 produse</span>
         </div>
-      </div>
 
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-        <div class="form-group">
-          <label class="form-label">Preț Raft (RON):</label>
-          <input type="number" step="0.01" class="form-control" id="fabPriceRegular" placeholder="Ex: 8.99" />
+        <div class="products-dynamic-list" id="fabProductsList">
+          <!-- Injected dynamically via JS -->
         </div>
-        <div class="form-group">
-          <label class="form-label">Preț Promoție (RON):</label>
-          <input type="number" step="0.01" class="form-control" id="fabPricePromo" placeholder="Ex: 6.99 (opțional)" />
-        </div>
+
+        <button class="btn btn-secondary btn-sm" style="margin-top: 8px; width: 100%; font-weight: 700;" onclick="app.addNewProductRow()">
+          ➕ Adaugă Produs Nou
+        </button>
       </div>
 
-      <div class="form-group">
-        <label class="form-label">Observații Magazin:</label>
-        <input type="text" class="form-control" id="fabNotes" placeholder="Ex: Stoc epuizat, etichetă lipsă, aranjat raft" />
-      </div>
-
-      <button class="btn btn-primary" onclick="app.savePriceEntry()">
-        💾 Salvează Intrare
-      </button>
-
-      <!-- List of saved entries for this store -->
-      <div style="margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px;">
-        <div style="font-size: 12px; font-weight: 700; margin-bottom: 6px;">Intrări înregistrate la acest magazin:</div>
-        <div id="fabLoggedEntriesList" style="display: flex; flex-direction: column; gap: 6px; font-size: 12px;">
-          <!-- Items injected via JS -->
-        </div>
-      </div>
+      <!-- Hidden Input for camera / photo upload -->
+      <input type="file" id="fabProductPhotoInput" accept="image/*" capture="environment" style="display: none;" onchange="app.handleProductPhotoSelected(event)" />
     </div>
   </div>
 
@@ -1557,7 +1529,10 @@
           </button>
         </div>
         <button class="btn btn-secondary btn-sm" onclick="app.openFabForStore(app.activeStoreId); app.closeStoreModal();">
-          📸 Înregistrează Preț / Poze Înainte-După
+          📸 Deschide Listă Produse & Poze
+        </button>
+        <button class="btn btn-secondary btn-sm" style="color: var(--text-muted); font-size: 11px;" onclick="app.resetStoreCoordinates(app.activeStoreId)">
+          🔄 Resetare Pin la Coordonatele Inițiale
         </button>
       </div>
     </div>
@@ -1567,7 +1542,7 @@
   <div class="modal-overlay" id="backupModalOverlay" style="align-items: center;" onclick="if(event.target === this) app.closeBackupModal()">
     <div class="reason-dialog" style="max-width: 420px;">
       <h3 style="font-size: 16px; font-weight: 700;">💾 Backup & Restaurare Date</h3>
-      <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Salvează un fișier JSON cu toate datele, pozele și prețurile culese pe cele 5 zile pentru siguranță.</p>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Salvează un fișier JSON cu toate datele, coordonatele modificate ale pinurilor, pozele și prețurile culese.</p>
       
       <div style="display: flex; flex-direction: column; gap: 10px; margin: 18px 0;">
         <button class="btn btn-primary" onclick="app.exportFullBackup()">
@@ -1613,128 +1588,123 @@
 
   <script>
     /**
-     * MERCHANDISER PRO APPLICATION - 5-DAY EXPANDED EDITION
-     * - Ziua 1 (Sector 4 & Popești - 20 magazine)
-     * - Ziua 2 (Ilfov Sud-Vest & Sector 5 - 19 magazine)
-     * - Ziua 3 (Ilfov Nord-Vest Chitila/Chiajna/Domnești & Sector 6 - 20 magazine)
-     * - Ziua 4 (Sector 6 Giulești/Crângași/Militari/Drumul Taberei - 14 magazine)
-     * - Ziua 5 (Chiajna / Bragadiru / Sector 5 Rahova/13 Septembrie/Libertății - 19 magazine)
+     * MERCHANDISER PRO APPLICATION - WEEK 1 (DAYS 1-5)
+     * Features:
+     * - Drag & Drop Pin Relocation: markers are draggable with automatic coordinate saving.
+     * - Google Maps Tile Integration: Google Hybrid Satellite + Google Streets.
+     * - Week 1 Structure (Days 1, 2, 3, 4, 5).
+     * - Dynamic Numbered Product List with Thumbnail, Name, Price, Reorder, Edit, Delete.
      */
     
-    // DATASET ZIUA 1 (Sheet3 - 20 Stores)
-    const STORES_DAY_1 = [
-      { id: "d1_1", name: "Mega Image Popești-Leordeni", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Șos. Olteniței 51A-55, Popești-Leordeni", lat: 44.3802, lng: 26.1685, order: 1 },
-      { id: "d1_2", name: "Mega Image Popești-Leordeni 2", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Șos. Olteniței 18-20, Popești-Leordeni", lat: 44.3887, lng: 26.1542, order: 2 },
-      { id: "d1_3", name: "Mega Image Drumul Binelui", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Str. Drumul Fermei 35, Popești-Leordeni", lat: 44.3739, lng: 26.1498, order: 3 },
-      { id: "d1_4", name: "Mega Image Biruinței 3", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Str. Biruinței 47, Popești-Leordeni", lat: 44.3688, lng: 26.1472, order: 4 },
-      { id: "d1_5", name: "Mega Image Amurgului", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Str. Oituz 46, Popești-Leordeni", lat: 44.3724, lng: 26.1420, order: 5 },
-      { id: "d1_6", name: "Mega Image Monaco Towers", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Berceni 96, Sector 4", lat: 44.3765, lng: 26.1394, order: 6 },
-      { id: "d1_7", name: "Penny Leonida", chain: "Penny", city: "Popești-Leordeni", county: "Ilfov", address: "Șos. Berceni 9, Popești-Leordeni", lat: 44.3708, lng: 26.1354, order: 7 },
-      { id: "d1_8", name: "Mega Image Berceni", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Berceni 41, Sector 4", lat: 44.3872, lng: 26.1298, order: 8 },
-      { id: "d1_9", name: "Mega Image Obregia", chain: "Mega Image", city: "Sector 4", county: "București", address: "Bd. Alexandru Obregia 25, Sector 4", lat: 44.3842, lng: 26.1176, order: 9 },
-      { id: "d1_10", name: "Penny Nițu Vasile", chain: "Penny", city: "Sector 4", county: "București", address: "Str. Nițu Vasile 9, Sector 4", lat: 44.3922, lng: 26.1172, order: 10 },
-      { id: "d1_11", name: "Mega Image Piața Sudului", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Olteniței 208, Sector 4", lat: 44.3929, lng: 26.1235, order: 11 },
-      { id: "d1_12", name: "Mega Image Brâncoveanu", chain: "Mega Image", city: "Sector 4", county: "București", address: "Bd. Constantin Brâncoveanu 45, Sector 4", lat: 44.3934, lng: 26.1025, order: 12 },
-      { id: "d1_13", name: "Mega Image Huedin", chain: "Mega Image", city: "Sector 4", county: "București", address: "Str. Grădiștea 8, Sector 4", lat: 44.3846, lng: 26.1038, order: 13 },
-      { id: "d1_14", name: "Penny Luică", chain: "Penny", city: "Sector 4", county: "București", address: "Str. Luică 23, Sector 4", lat: 44.3828, lng: 26.0954, order: 14 },
-      { id: "d1_15", name: "Mega Image Progresului", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Giurgiului 113-115, Sector 4", lat: 44.3882, lng: 26.0862, order: 15 },
-      { id: "d1_16", name: "Mega Image Giurgiului 2", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Giurgiului 54, Sector 4", lat: 44.3985, lng: 26.0888, order: 16 },
-      { id: "d1_17", name: "Mega Image City Mall", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Olteniței 2, Sector 4", lat: 44.4048, lng: 26.0962, order: 17 },
-      { id: "d1_18", name: "Mega Image Împăratul Traian", chain: "Mega Image", city: "Sector 4", county: "București", address: "Str. Împăratul Traian 32, Sector 4", lat: 44.4172, lng: 26.0965, order: 18 },
-      { id: "d1_19", name: "Mega Image Tineretului", chain: "Mega Image", city: "Sector 4", county: "București", address: "Bd. Tineretului 1, Sector 4", lat: 44.4140, lng: 26.1072, order: 19 },
-      { id: "d1_20", name: "Penny Timpuri Noi", chain: "Penny", city: "Sector 4", county: "București", address: "Str. V.V. Stanciu 213, Sector 4", lat: 44.4152, lng: 26.1152, order: 20 }
-    ];
-
-    // DATASET ZIUA 2 (Sheet4 - 19 Stores)
-    const STORES_DAY_2 = [
-      { id: "d2_1", name: "Mega Image Comuna Berceni", chain: "Mega Image", city: "Berceni", county: "Ilfov", address: "Bd. 1 Mai 66, Berceni", lat: 44.3168, lng: 26.1795, order: 1 },
-      { id: "d2_2", name: "Penny Berceni", chain: "Penny", city: "Berceni", county: "Ilfov", address: "Str. Luica 62-64 / Bd. 1 Mai, Berceni", lat: 44.3125, lng: 26.1830, order: 2 },
-      { id: "d2_3", name: "Penny Vidra", chain: "Penny", city: "Vidra", county: "Ilfov", address: "Str. Principală 91, Vidra", lat: 44.2755, lng: 26.1550, order: 3 },
-      { id: "d2_4", name: "Mega Image Jilava", chain: "Mega Image", city: "Jilava", county: "Ilfov", address: "Șos. Giurgiului 288, Jilava", lat: 44.3335, lng: 26.0795, order: 4 },
-      { id: "d2_5", name: "Penny Măgurele", chain: "Penny", city: "Măgurele", county: "Ilfov", address: "Str. Atomiștilor 373, Măgurele", lat: 44.3485, lng: 26.0335, order: 5 },
-      { id: "d2_6", name: "Mega Image Atomiștilor", chain: "Mega Image", city: "Măgurele", county: "Ilfov", address: "Str. Atomiștilor 411, Măgurele", lat: 44.3460, lng: 26.0290, order: 6 },
-      { id: "d2_7", name: "Penny Bragadiru", chain: "Penny", city: "Bragadiru", county: "Ilfov", address: "Șos. Alexandriei 112, Bragadiru", lat: 44.3685, lng: 25.9960, order: 7 },
-      { id: "d2_8", name: "Mega Image Bragadiru", chain: "Mega Image", city: "Bragadiru", county: "Ilfov", address: "Șos. Alexandriei 44, Bragadiru", lat: 44.3780, lng: 26.0125, order: 8 },
-      { id: "d2_9", name: "Penny Plevnei", chain: "Penny", city: "Bragadiru", county: "Ilfov", address: "Str. Plevnei 11, Bragadiru", lat: 44.3820, lng: 26.0090, order: 9 },
-      { id: "d2_10", name: "Mega Image Bragadiru 2 (Speranței)", chain: "Mega Image", city: "Bragadiru", county: "Ilfov", address: "Str. Speranței 77, Bragadiru", lat: 44.3835, lng: 26.0195, order: 10 },
-      { id: "d2_11", name: "Mega Image Mărgelelor 2", chain: "Mega Image", city: "Bragadiru", county: "Ilfov", address: "Str. Mărgelelor 23, Bragadiru", lat: 44.3875, lng: 26.0260, order: 11 },
-      { id: "d2_12", name: "Mega Image Cartierul Latin", chain: "Mega Image", city: "Bragadiru", county: "Ilfov", address: "Prelungirea Ghencea 53, Bragadiru", lat: 44.4055, lng: 26.0045, order: 12 },
-      { id: "d2_13", name: "PENNY GHENCEA", chain: "Penny", city: "Bragadiru", county: "Ilfov", address: "Prelungirea Ghencea 14, Bragadiru", lat: 44.4072, lng: 26.0160, order: 13 },
-      { id: "d2_14", name: "Mega Image Pucheni", chain: "Mega Image", city: "Sector 5", county: "București", address: "Str. Pucheni 42, Sector 5", lat: 44.3970, lng: 26.0680, order: 14 },
-      { id: "d2_15", name: "Penny Sălaj", chain: "Penny", city: "Sector 5", county: "București", address: "Șos. Sălaj 269, Sector 5", lat: 44.3910, lng: 26.0740, order: 15 },
-      { id: "d2_16", name: "Penny Garun (Năsăud)", chain: "Penny", city: "Sector 5", county: "București", address: "Str. Năsăud 97, Sector 5", lat: 44.4095, lng: 26.0845, order: 16 },
-      { id: "d2_17", name: "Mega Image Sebastian", chain: "Mega Image", city: "Sector 5", county: "București", address: "Str. Mihail Sebastian 22, Sector 5", lat: 44.4215, lng: 26.0780, order: 17 },
-      { id: "d2_18", name: "Mega Image 13 Septembrie", chain: "Mega Image", city: "Sector 5", county: "București", address: "Calea 13 Septembrie 13, Sector 5", lat: 44.4265, lng: 26.0865, order: 18 },
-      { id: "d2_19", name: "Mega Image Regina Maria", chain: "Mega Image", city: "Sector 5", county: "București", address: "Bd. Regina Maria 23-25, Sector 5", lat: 44.4248, lng: 26.1025, order: 19 }
-    ];
-
-    // DATASET ZIUA 3 (Sheet5 - 20 Stores)
-    const STORES_DAY_3 = [
-      { id: "d3_1", name: "Mega Image Autogara Chitila", chain: "Mega Image", city: "Chitila", county: "Ilfov", address: "Șos. Chitilei 18, Chitila", lat: 44.4782, lng: 26.0275, order: 1 },
-      { id: "d3_2", name: "Mega Image Chitila 2", chain: "Mega Image", city: "Chitila", county: "Ilfov", address: "Șos. Banatului 68A, Chitila", lat: 44.5098, lng: 25.9752, order: 2 },
-      { id: "d3_3", name: "Penny Chiajna", chain: "Penny", city: "Chiajna", county: "Ilfov", address: "Str. I.L. Caragiale 11B, Chiajna", lat: 44.4602, lng: 25.9798, order: 3 },
-      { id: "d3_4", name: "Mega Image Chiajna", chain: "Mega Image", city: "Chiajna", county: "Ilfov", address: "Str. Preot Sebe Costin 1A, Chiajna", lat: 44.4585, lng: 25.9745, order: 4 },
-      { id: "d3_5", name: "Penny Dudu", chain: "Penny", city: "Chiajna", county: "Ilfov", address: "Str. Soarelui 4, Chiajna (Dudu)", lat: 44.4532, lng: 25.9868, order: 5 },
-      { id: "d3_6", name: "Mega Image Drumul Bacriului", chain: "Mega Image", city: "Chiajna", county: "Ilfov", address: "Str. Drumul Bacriului 36, Chiajna", lat: 44.4445, lng: 25.9922, order: 6 },
-      { id: "d3_7", name: "Penny Apeductului", chain: "Penny", city: "Chiajna", county: "Ilfov", address: "Str. Apeductului 9, Chiajna", lat: 44.4402, lng: 25.9880, order: 7 },
-      { id: "d3_8", name: "Penny Chiajna Center", chain: "Penny", city: "Chiajna", county: "Ilfov", address: "Strada Serg. Ilie Petre 87, Chiajna", lat: 44.4348, lng: 25.9825, order: 8 },
-      { id: "d3_9", name: "Mega Image Rezervelor 3", chain: "Mega Image", city: "Chiajna", county: "Ilfov", address: "Str. Tineretului 85, Chiajna", lat: 44.4312, lng: 25.9785, order: 9 },
-      { id: "d3_10", name: "Mega Image Ciorogârla", chain: "Mega Image", city: "Ciorogârla", county: "Ilfov", address: "Calea București 136E, Ciorogârla", lat: 44.4452, lng: 25.8825, order: 10 },
-      { id: "d3_11", name: "Mega Image Domnești 2", chain: "Mega Image", city: "Domnești", county: "Ilfov", address: "Tudor Vladimirescu 307, Domnești", lat: 44.4015, lng: 25.9180, order: 11 },
-      { id: "d3_12", name: "Profi Prelungirea Ghencea", chain: "Profi", city: "Sector 6", county: "București", address: "Prelungirea Ghencea 32, Sector 6", lat: 44.4125, lng: 26.0210, order: 12 },
-      { id: "d3_13", name: "Profi Valea Oltului", chain: "Profi", city: "Sector 6", county: "București", address: "Str. Valea Oltului 12, Sector 6", lat: 44.4188, lng: 26.0235, order: 13 },
-      { id: "d3_14", name: "Profi Valea Doftanei", chain: "Profi", city: "Sector 6", county: "București", address: "Drumul Valea Doftanei 77, Sector 6", lat: 44.4208, lng: 26.0152, order: 14 },
-      { id: "d3_15", name: "Profi Timișoara 101", chain: "Profi", city: "Sector 6", county: "București", address: "Bld. Timișoara 101, Sector 6", lat: 44.4245, lng: 26.0020, order: 15 },
-      { id: "d3_16", name: "Profi Timișoara 73", chain: "Profi", city: "Sector 6", county: "București", address: "Bld. Timișoara 73, Sector 6", lat: 44.4248, lng: 26.0185, order: 16 },
-      { id: "d3_17", name: "Profi Valea Lungă", chain: "Profi", city: "Sector 6", county: "București", address: "Str. Valea Lungă 7, Sector 6", lat: 44.4282, lng: 26.0120, order: 17 },
-      { id: "d3_18", name: "Profi Iuliu Maniu", chain: "Profi", city: "Sector 6", county: "București", address: "Bld. Iuliu Maniu 109, Sector 6", lat: 44.4342, lng: 26.0145, order: 18 },
-      { id: "d3_19", name: "Profi Bârsănești", chain: "Profi", city: "Sector 6", county: "București", address: "Str. Bărbătești 2, Sector 6", lat: 44.4308, lng: 26.0215, order: 19 },
-      { id: "d3_20", name: "Profi Brașov", chain: "Profi", city: "Sector 6", county: "București", address: "Str. Brașov 24, Sector 6", lat: 44.4230, lng: 26.0355, order: 20 }
-    ];
-
-    // DATASET ZIUA 4 (Sheet6 - 14 Stores)
-    const STORES_DAY_4 = [
-      { id: "d4_1", name: "Mega Image Giulești", chain: "Mega Image", city: "Sector 6", county: "București", address: "Calea Giulești 38-40, Sector 6", lat: 44.4532, lng: 26.0578, order: 1 },
-      { id: "d4_2", name: "Mega Image Piața Crângași", chain: "Mega Image", city: "Sector 6", county: "București", address: "Calea Crângași 29, Sector 6", lat: 44.4520, lng: 26.0465, order: 2 },
-      { id: "d4_3", name: "Penny Crângași (Virtuții)", chain: "Penny", city: "Sector 6", county: "București", address: "Șos. Virtuții 148, Sector 6", lat: 44.4468, lng: 26.0375, order: 3 },
-      { id: "d4_4", name: "Mega Image Uverturii", chain: "Mega Image", city: "Sector 6", county: "București", address: "Bd. Uverturii 83, Sector 6", lat: 44.4398, lng: 26.0175, order: 4 },
-      { id: "d4_5", name: "Mega Image Apusului", chain: "Mega Image", city: "Sector 6", county: "București", address: "Str. Apusului 50, Sector 6", lat: 44.4365, lng: 26.0078, order: 5 },
-      { id: "d4_6", name: "Penny Păcii", chain: "Penny", city: "Sector 6", county: "București", address: "Bd. Iuliu Maniu 220C, Sector 6", lat: 44.4338, lng: 25.9925, order: 6 },
-      { id: "d4_7", name: "Mega Image Mărgelelor", chain: "Mega Image", city: "Sector 6", county: "București", address: "Str. Mărgelelor 6, Sector 6", lat: 44.4305, lng: 25.9865, order: 7 },
-      { id: "d4_8", name: "Mega Image Prelungirea Ghencea 89", chain: "Mega Image", city: "Sector 6", county: "București", address: "Prelungirea Ghencea 89, Sector 6", lat: 44.4098, lng: 26.0025, order: 8 },
-      { id: "d4_9", name: "Mega Image Valea Oltului", chain: "Mega Image", city: "Sector 6", county: "București", address: "Str. Valea Oltului 131-137, Sector 6", lat: 44.4128, lng: 26.0225, order: 9 },
-      { id: "d4_10", name: "Mega Image Bd. Timișoara 56", chain: "Mega Image", city: "Sector 6", county: "București", address: "Bd. Timișoara 56, Sector 6", lat: 44.4252, lng: 26.0125, order: 10 },
-      { id: "d4_11", name: "Mega Image Compozitorilor", chain: "Mega Image", city: "Sector 6", county: "București", address: "Bd. 1 Mai 28, Sector 6", lat: 44.4238, lng: 26.0385, order: 11 },
-      { id: "d4_12", name: "Mega Image Compozitorilor - Sibiu", chain: "Mega Image", city: "Sector 6", county: "București", address: "Bd. 1 Mai 18, Sector 6", lat: 44.4248, lng: 26.0465, order: 12 },
-      { id: "d4_13", name: "Mega Image Timișoara Plaza", chain: "Mega Image", city: "Sector 6", county: "București", address: "Bd. Timișoara 26, Sector 6", lat: 44.4285, lng: 26.0360, order: 13 },
-      { id: "d4_14", name: "Mega Image Timișoara 18", chain: "Mega Image", city: "Sector 6", county: "București", address: "Bd. Timișoara 18, Sector 6", lat: 44.4298, lng: 26.0535, order: 14 }
-    ];
-
-    // DATASET ZIUA 5 (Sheet9 - 19 Stores)
-    const STORES_DAY_5 = [
-      { id: "d5_1", name: "Profi Chiajna Tineretului", chain: "Profi", city: "Chiajna", county: "Ilfov", address: "Str. Tineretului 40, Chiajna", lat: 44.4465, lng: 25.9755, order: 1 },
-      { id: "d5_2", name: "Profi Weiner Palada", chain: "Profi", city: "Chiajna", county: "Ilfov", address: "Str. Weiner Palada 8, Chiajna", lat: 44.4415, lng: 25.9860, order: 2 },
-      { id: "d5_3", name: "Profi Chiajna (Ilie Petre)", chain: "Profi", city: "Chiajna", county: "Ilfov", address: "Str. Sergent Ilie Petre 51, Chiajna", lat: 44.4390, lng: 25.9815, order: 3 },
-      { id: "d5_4", name: "Profi Rezervelor", chain: "Profi", city: "Chiajna", county: "Ilfov", address: "Str. Rezervelor 99, Chiajna", lat: 44.4372, lng: 25.9790, order: 4 },
-      { id: "d5_5", name: "Profi Prelungirea Ghencea", chain: "Profi", city: "Sector 5", county: "București", address: "Prelungirea Ghencea 47-49, Sector 5", lat: 44.4085, lng: 26.0085, order: 5 },
-      { id: "d5_6", name: "Profi Mărgelelor", chain: "Profi", city: "Bragadiru", county: "Ilfov", address: "Str. Mărgelelor 32, Bragadiru", lat: 44.3865, lng: 26.0245, order: 6 },
-      { id: "d5_7", name: "Profi Speranței", chain: "Profi", city: "Bragadiru", county: "Ilfov", address: "Str. Speranței 69, Bragadiru", lat: 44.3830, lng: 26.0185, order: 7 },
-      { id: "d5_8", name: "Profi Bragadiru (Speranței 6-8)", chain: "Profi", city: "Bragadiru", county: "Ilfov", address: "Str. Speranței 6-8, Bragadiru", lat: 44.3795, lng: 26.0150, order: 8 },
-      { id: "d5_9", name: "Profi Coralului", chain: "Profi", city: "Bragadiru", county: "Ilfov", address: "Str. Coralului 4, Bragadiru", lat: 44.3755, lng: 26.0095, order: 9 },
-      { id: "d5_10", name: "Profi Mărgeanului 62", chain: "Profi", city: "Sector 5", county: "București", address: "Str. Mărgeanului 62, Sector 5", lat: 44.4035, lng: 26.0595, order: 10 },
-      { id: "d5_11", name: "Profi Mărgeanului 16", chain: "Profi", city: "Sector 5", county: "București", address: "Str. Mărgeanului 16, Sector 5", lat: 44.4065, lng: 26.0685, order: 11 },
-      { id: "d5_12", name: "Profi Mărgeanului", chain: "Profi", city: "Sector 5", county: "București", address: "Str. Mărgeanului 12, Sector 5", lat: 44.4070, lng: 26.0695, order: 12 },
-      { id: "d5_13", name: "Profi Bârcă", chain: "Profi", city: "Sector 5", county: "București", address: "Str. Bârcă 2, Sector 5", lat: 44.4105, lng: 26.0650, order: 13 },
-      { id: "d5_14", name: "Profi Sălaj", chain: "Profi", city: "Sector 5", county: "București", address: "Șos. Sălaj 133, Sector 5", lat: 44.4030, lng: 26.0790, order: 14 },
-      { id: "d5_15", name: "Profi Ferentari", chain: "Profi", city: "Sector 5", county: "București", address: "Calea Ferentari 20, Sector 5", lat: 44.4080, lng: 26.0890, order: 15 },
-      { id: "d5_16", name: "Profi Rahova", chain: "Profi", city: "Sector 5", county: "București", address: "Calea Rahovei 22, Sector 5", lat: 44.4185, lng: 26.0875, order: 16 },
-      { id: "d5_17", name: "Profi Ion Urdăreanu", chain: "Profi", city: "Sector 5", county: "București", address: "Str. Ion Urdăreanu 7, Sector 5", lat: 44.4235, lng: 26.0745, order: 17 },
-      { id: "d5_18", name: "Profi 13 Septembrie", chain: "Profi", city: "Sector 5", county: "București", address: "Calea 13 Septembrie 111, Sector 5", lat: 44.4245, lng: 26.0795, order: 18 },
-      { id: "d5_19", name: "Profi Libertății", chain: "Profi", city: "Sector 5", county: "București", address: "B-dul Libertății 2, Sector 5", lat: 44.4278, lng: 26.0915, order: 19 }
-    ];
+    // CANONICAL INITIAL DATASETS FOR WEEK 1 (DAYS 1-5)
+    const INITIAL_DATA_WEEK_1 = {
+      day1: [
+        { id: "d1_1", name: "Mega Image Popești-Leordeni", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Șos. Olteniței 51A-55, Popești-Leordeni", lat: 44.3802, lng: 26.1685, order: 1 },
+        { id: "d1_2", name: "Mega Image Popești-Leordeni 2", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Șos. Olteniței 18-20, Popești-Leordeni", lat: 44.3887, lng: 26.1542, order: 2 },
+        { id: "d1_3", name: "Mega Image Drumul Binelui", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Str. Drumul Fermei 35, Popești-Leordeni", lat: 44.3739, lng: 26.1498, order: 3 },
+        { id: "d1_4", name: "Mega Image Biruinței 3", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Str. Biruinței 47, Popești-Leordeni", lat: 44.3688, lng: 26.1472, order: 4 },
+        { id: "d1_5", name: "Mega Image Amurgului", chain: "Mega Image", city: "Popești-Leordeni", county: "Ilfov", address: "Str. Oituz 46, Popești-Leordeni", lat: 44.3724, lng: 26.1420, order: 5 },
+        { id: "d1_6", name: "Mega Image Monaco Towers", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Berceni 96, Sector 4", lat: 44.3765, lng: 26.1394, order: 6 },
+        { id: "d1_7", name: "Penny Leonida", chain: "Penny", city: "Popești-Leordeni", county: "Ilfov", address: "Șos. Berceni 9, Popești-Leordeni", lat: 44.3708, lng: 26.1354, order: 7 },
+        { id: "d1_8", name: "Mega Image Berceni", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Berceni 41, Sector 4", lat: 44.3872, lng: 26.1298, order: 8 },
+        { id: "d1_9", name: "Mega Image Obregia", chain: "Mega Image", city: "Sector 4", county: "București", address: "Bd. Alexandru Obregia 25, Sector 4", lat: 44.3842, lng: 26.1176, order: 9 },
+        { id: "d1_10", name: "Penny Nițu Vasile", chain: "Penny", city: "Sector 4", county: "București", address: "Str. Nițu Vasile 9, Sector 4", lat: 44.3922, lng: 26.1172, order: 10 },
+        { id: "d1_11", name: "Mega Image Piața Sudului", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Olteniței 208, Sector 4", lat: 44.3929, lng: 26.1235, order: 11 },
+        { id: "d1_12", name: "Mega Image Brâncoveanu", chain: "Mega Image", city: "Sector 4", county: "București", address: "Bd. Constantin Brâncoveanu 45, Sector 4", lat: 44.3934, lng: 26.1025, order: 12 },
+        { id: "d1_13", name: "Mega Image Huedin", chain: "Mega Image", city: "Sector 4", county: "București", address: "Str. Grădiștea 8, Sector 4", lat: 44.3846, lng: 26.1038, order: 13 },
+        { id: "d1_14", name: "Penny Luică", chain: "Penny", city: "Sector 4", county: "București", address: "Str. Luică 23, Sector 4", lat: 44.3828, lng: 26.0954, order: 14 },
+        { id: "d1_15", name: "Mega Image Progresului", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Giurgiului 113-115, Sector 4", lat: 44.3882, lng: 26.0862, order: 15 },
+        { id: "d1_16", name: "Mega Image Giurgiului 2", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Giurgiului 54, Sector 4", lat: 44.3985, lng: 26.0888, order: 16 },
+        { id: "d1_17", name: "Mega Image City Mall", chain: "Mega Image", city: "Sector 4", county: "București", address: "Șos. Olteniței 2, Sector 4", lat: 44.4048, lng: 26.0962, order: 17 },
+        { id: "d1_18", name: "Mega Image Împăratul Traian", chain: "Mega Image", city: "Sector 4", county: "București", address: "Str. Împăratul Traian 32, Sector 4", lat: 44.4172, lng: 26.0965, order: 18 },
+        { id: "d1_19", name: "Mega Image Tineretului", chain: "Mega Image", city: "Sector 4", county: "București", address: "Bd. Tineretului 1, Sector 4", lat: 44.4140, lng: 26.1072, order: 19 },
+        { id: "d1_20", name: "Penny Timpuri Noi", chain: "Penny", city: "Sector 4", county: "București", address: "Str. V.V. Stanciu 213, Sector 4", lat: 44.4152, lng: 26.1152, order: 20 }
+      ],
+      day2: [
+        { id: "d2_1", name: "Mega Image Comuna Berceni", chain: "Mega Image", city: "Berceni", county: "Ilfov", address: "Bd. 1 Mai 66, Berceni", lat: 44.3168, lng: 26.1795, order: 1 },
+        { id: "d2_2", name: "Penny Berceni", chain: "Penny", city: "Berceni", county: "Ilfov", address: "Str. Luica 62-64 / Bd. 1 Mai, Berceni", lat: 44.3125, lng: 26.1830, order: 2 },
+        { id: "d2_3", name: "Penny Vidra", chain: "Penny", city: "Vidra", county: "Ilfov", address: "Str. Principală 91, Vidra", lat: 44.2755, lng: 26.1550, order: 3 },
+        { id: "d2_4", name: "Mega Image Jilava", chain: "Mega Image", city: "Jilava", county: "Ilfov", address: "Șos. Giurgiului 288, Jilava", lat: 44.3335, lng: 26.0795, order: 4 },
+        { id: "d2_5", name: "Penny Măgurele", chain: "Penny", city: "Măgurele", county: "Ilfov", address: "Str. Atomiștilor 373, Măgurele", lat: 44.3485, lng: 26.0335, order: 5 },
+        { id: "d2_6", name: "Mega Image Atomiștilor", chain: "Mega Image", city: "Măgurele", county: "Ilfov", address: "Str. Atomiștilor 411, Măgurele", lat: 44.3460, lng: 26.0290, order: 6 },
+        { id: "d2_7", name: "Penny Bragadiru", chain: "Penny", city: "Bragadiru", county: "Ilfov", address: "Șos. Alexandriei 112, Bragadiru", lat: 44.3685, lng: 25.9960, order: 7 },
+        { id: "d2_8", name: "Mega Image Bragadiru", chain: "Mega Image", city: "Bragadiru", county: "Ilfov", address: "Șos. Alexandriei 44, Bragadiru", lat: 44.3780, lng: 26.0125, order: 8 },
+        { id: "d2_9", name: "Penny Plevnei", chain: "Penny", city: "Bragadiru", county: "Ilfov", address: "Str. Plevnei 11, Bragadiru", lat: 44.3820, lng: 26.0090, order: 9 },
+        { id: "d2_10", name: "Mega Image Bragadiru 2 (Speranței)", chain: "Mega Image", city: "Bragadiru", county: "Ilfov", address: "Str. Speranței 77, Bragadiru", lat: 44.3835, lng: 26.0195, order: 10 },
+        { id: "d2_11", name: "Mega Image Mărgelelor 2", chain: "Mega Image", city: "Bragadiru", county: "Ilfov", address: "Str. Mărgelelor 23, Bragadiru", lat: 44.3875, lng: 26.0260, order: 11 },
+        { id: "d2_12", name: "Mega Image Cartierul Latin", chain: "Mega Image", city: "Bragadiru", county: "Ilfov", address: "Prelungirea Ghencea 53, Bragadiru", lat: 44.4055, lng: 26.0045, order: 12 },
+        { id: "d2_13", name: "PENNY GHENCEA", chain: "Penny", city: "Bragadiru", county: "Ilfov", address: "Prelungirea Ghencea 14, Bragadiru", lat: 44.4072, lng: 26.0160, order: 13 },
+        { id: "d2_14", name: "Mega Image Pucheni", chain: "Mega Image", city: "Sector 5", county: "București", address: "Str. Pucheni 42, Sector 5", lat: 44.3970, lng: 26.0680, order: 14 },
+        { id: "d2_15", name: "Penny Sălaj", chain: "Penny", city: "Sector 5", county: "București", address: "Șos. Sălaj 269, Sector 5", lat: 44.3910, lng: 26.0740, order: 15 },
+        { id: "d2_16", name: "Penny Garun (Năsăud)", chain: "Penny", city: "Sector 5", county: "București", address: "Str. Năsăud 97, Sector 5", lat: 44.4095, lng: 26.0845, order: 16 },
+        { id: "d2_17", name: "Mega Image Sebastian", chain: "Mega Image", city: "Sector 5", county: "București", address: "Str. Mihail Sebastian 22, Sector 5", lat: 44.4215, lng: 26.0780, order: 17 },
+        { id: "d2_18", name: "Mega Image 13 Septembrie", chain: "Mega Image", city: "Sector 5", county: "București", address: "Calea 13 Septembrie 13, Sector 5", lat: 44.4265, lng: 26.0865, order: 18 },
+        { id: "d2_19", name: "Mega Image Regina Maria", chain: "Mega Image", city: "Sector 5", county: "București", address: "Bd. Regina Maria 23-25, Sector 5", lat: 44.4248, lng: 26.1025, order: 19 }
+      ],
+      day3: [
+        { id: "d3_1", name: "Mega Image Autogara Chitila", chain: "Mega Image", city: "Chitila", county: "Ilfov", address: "Șos. Chitilei 18, Chitila", lat: 44.4782, lng: 26.0275, order: 1 },
+        { id: "d3_2", name: "Mega Image Chitila 2", chain: "Mega Image", city: "Chitila", county: "Ilfov", address: "Șos. Banatului 68A, Chitila", lat: 44.5098, lng: 25.9752, order: 2 },
+        { id: "d3_3", name: "Penny Chiajna", chain: "Penny", city: "Chiajna", county: "Ilfov", address: "Str. I.L. Caragiale 11B, Chiajna", lat: 44.4602, lng: 25.9798, order: 3 },
+        { id: "d3_4", name: "Mega Image Chiajna", chain: "Mega Image", city: "Chiajna", county: "Ilfov", address: "Str. Preot Sebe Costin 1A, Chiajna", lat: 44.4585, lng: 25.9745, order: 4 },
+        { id: "d3_5", name: "Penny Dudu", chain: "Penny", city: "Chiajna", county: "Ilfov", address: "Str. Soarelui 4, Chiajna (Dudu)", lat: 44.4532, lng: 25.9868, order: 5 },
+        { id: "d3_6", name: "Mega Image Drumul Bacriului", chain: "Mega Image", city: "Chiajna", county: "Ilfov", address: "Str. Drumul Bacriului 36, Chiajna", lat: 44.4445, lng: 25.9922, order: 6 },
+        { id: "d3_7", name: "Penny Apeductului", chain: "Penny", city: "Chiajna", county: "Ilfov", address: "Str. Apeductului 9, Chiajna", lat: 44.4402, lng: 25.9880, order: 7 },
+        { id: "d3_8", name: "Penny Chiajna Center", chain: "Penny", city: "Chiajna", county: "Ilfov", address: "Strada Serg. Ilie Petre 87, Chiajna", lat: 44.4348, lng: 25.9825, order: 8 },
+        { id: "d3_9", name: "Mega Image Rezervelor 3", chain: "Mega Image", city: "Chiajna", county: "Ilfov", address: "Str. Tineretului 85, Chiajna", lat: 44.4312, lng: 25.9785, order: 9 },
+        { id: "d3_10", name: "Mega Image Ciorogârla", chain: "Mega Image", city: "Ciorogârla", county: "Ilfov", address: "Calea București 136E, Ciorogârla", lat: 44.4452, lng: 25.8825, order: 10 },
+        { id: "d3_11", name: "Mega Image Domnești 2", chain: "Mega Image", city: "Domnești", county: "Ilfov", address: "Tudor Vladimirescu 307, Domnești", lat: 44.4015, lng: 25.9180, order: 11 },
+        { id: "d3_12", name: "Profi Prelungirea Ghencea", chain: "Profi", city: "Sector 6", county: "București", address: "Prelungirea Ghencea 32, Sector 6", lat: 44.4125, lng: 26.0210, order: 12 },
+        { id: "d3_13", name: "Profi Valea Oltului", chain: "Profi", city: "Sector 6", county: "București", address: "Str. Valea Oltului 12, Sector 6", lat: 44.4188, lng: 26.0235, order: 13 },
+        { id: "d3_14", name: "Profi Valea Doftanei", chain: "Profi", city: "Sector 6", county: "București", address: "Drumul Valea Doftanei 77, Sector 6", lat: 44.4208, lng: 26.0152, order: 14 },
+        { id: "d3_15", name: "Profi Timișoara 101", chain: "Profi", city: "Sector 6", county: "București", address: "Bld. Timișoara 101, Sector 6", lat: 44.4245, lng: 26.0020, order: 15 },
+        { id: "d3_16", name: "Profi Timișoara 73", chain: "Profi", city: "Sector 6", county: "București", address: "Bld. Timișoara 73, Sector 6", lat: 44.4248, lng: 26.0185, order: 16 },
+        { id: "d3_17", name: "Profi Valea Lungă", chain: "Profi", city: "Sector 6", county: "București", address: "Str. Valea Lungă 7, Sector 6", lat: 44.4282, lng: 26.0120, order: 17 },
+        { id: "d3_18", name: "Profi Iuliu Maniu", chain: "Profi", city: "Sector 6", county: "București", address: "Bld. Iuliu Maniu 109, Sector 6", lat: 44.4342, lng: 26.0145, order: 18 },
+        { id: "d3_19", name: "Profi Bârsănești", chain: "Profi", city: "Sector 6", county: "București", address: "Str. Bărbătești 2, Sector 6", lat: 44.4308, lng: 26.0215, order: 19 },
+        { id: "d3_20", name: "Profi Brașov", chain: "Profi", city: "Sector 6", county: "București", address: "Str. Brașov 24, Sector 6", lat: 44.4230, lng: 26.0355, order: 20 }
+      ],
+      day4: [
+        { id: "d4_1", name: "Mega Image Giulești", chain: "Mega Image", city: "Sector 6", county: "București", address: "Calea Giulești 38-40, Sector 6", lat: 44.4532, lng: 26.0578, order: 1 },
+        { id: "d4_2", name: "Mega Image Piața Crângași", chain: "Mega Image", city: "Sector 6", county: "București", address: "Calea Crângași 29, Sector 6", lat: 44.4520, lng: 26.0465, order: 2 },
+        { id: "d4_3", name: "Penny Crângași (Virtuții)", chain: "Penny", city: "Sector 6", county: "București", address: "Șos. Virtuții 148, Sector 6", lat: 44.4468, lng: 26.0375, order: 3 },
+        { id: "d4_4", name: "Mega Image Uverturii", chain: "Mega Image", city: "Sector 6", county: "București", address: "Bd. Uverturii 83, Sector 6", lat: 44.4398, lng: 26.0175, order: 4 },
+        { id: "d4_5", name: "Mega Image Apusului", chain: "Mega Image", city: "Sector 6", county: "București", address: "Str. Apusului 50, Sector 6", lat: 44.4365, lng: 26.0078, order: 5 },
+        { id: "d4_6", name: "Penny Păcii", chain: "Penny", city: "Sector 6", county: "București", address: "Bd. Iuliu Maniu 220C, Sector 6", lat: 44.4338, lng: 25.9925, order: 6 },
+        { id: "d4_7", name: "Mega Image Mărgelelor", chain: "Mega Image", city: "Sector 6", county: "București", address: "Str. Mărgelelor 6, Sector 6", lat: 44.4305, lng: 25.9865, order: 7 },
+        { id: "d4_8", name: "Mega Image Prelungirea Ghencea 89", chain: "Mega Image", city: "Sector 6", county: "București", address: "Prelungirea Ghencea 89, Sector 6", lat: 44.4098, lng: 26.0025, order: 8 },
+        { id: "d4_9", name: "Mega Image Valea Oltului", chain: "Mega Image", city: "Sector 6", county: "București", address: "Str. Valea Oltului 131-137, Sector 6", lat: 44.4128, lng: 26.0225, order: 9 },
+        { id: "d4_10", name: "Mega Image Bd. Timișoara 56", chain: "Mega Image", city: "Sector 6", county: "București", address: "Bd. Timișoara 56, Sector 6", lat: 44.4252, lng: 26.0125, order: 10 },
+        { id: "d4_11", name: "Mega Image Compozitorilor", chain: "Mega Image", city: "Sector 6", county: "București", address: "Bd. 1 Mai 28, Sector 6", lat: 44.4238, lng: 26.0385, order: 11 },
+        { id: "d4_12", name: "Mega Image Compozitorilor - Sibiu", chain: "Mega Image", city: "Sector 6", county: "București", address: "Bd. 1 Mai 18, Sector 6", lat: 44.4248, lng: 26.0465, order: 12 },
+        { id: "d4_13", name: "Mega Image Timișoara Plaza", chain: "Mega Image", city: "Sector 6", county: "București", address: "Bd. Timișoara 26, Sector 6", lat: 44.4285, lng: 26.0360, order: 13 },
+        { id: "d4_14", name: "Mega Image Timișoara 18", chain: "Mega Image", city: "Sector 6", county: "București", address: "Bd. Timișoara 18, Sector 6", lat: 44.4298, lng: 26.0535, order: 14 }
+      ],
+      day5: [
+        { id: "d5_1", name: "Profi Chiajna Tineretului", chain: "Profi", city: "Chiajna", county: "Ilfov", address: "Str. Tineretului 40, Chiajna", lat: 44.4465, lng: 25.9755, order: 1 },
+        { id: "d5_2", name: "Profi Weiner Palada", chain: "Profi", city: "Chiajna", county: "Ilfov", address: "Str. Weiner Palada 8, Chiajna", lat: 44.4415, lng: 25.9860, order: 2 },
+        { id: "d5_3", name: "Profi Chiajna (Ilie Petre)", chain: "Profi", city: "Chiajna", county: "Ilfov", address: "Str. Sergent Ilie Petre 51, Chiajna", lat: 44.4390, lng: 25.9815, order: 3 },
+        { id: "d5_4", name: "Profi Rezervelor", chain: "Profi", city: "Chiajna", county: "Ilfov", address: "Str. Rezervelor 99, Chiajna", lat: 44.4372, lng: 25.9790, order: 4 },
+        { id: "d5_5", name: "Profi Prelungirea Ghencea", chain: "Profi", city: "Sector 5", county: "București", address: "Prelungirea Ghencea 47-49, Sector 5", lat: 44.4085, lng: 26.0085, order: 5 },
+        { id: "d5_6", name: "Profi Mărgelelor", chain: "Profi", city: "Bragadiru", county: "Ilfov", address: "Str. Mărgelelor 32, Bragadiru", lat: 44.3865, lng: 26.0245, order: 6 },
+        { id: "d5_7", name: "Profi Speranței", chain: "Profi", city: "Bragadiru", county: "Ilfov", address: "Str. Speranței 69, Bragadiru", lat: 44.3830, lng: 26.0185, order: 7 },
+        { id: "d5_8", name: "Profi Bragadiru (Speranței 6-8)", chain: "Profi", city: "Bragadiru", county: "Ilfov", address: "Str. Speranței 6-8, Bragadiru", lat: 44.3795, lng: 26.0150, order: 8 },
+        { id: "d5_9", name: "Profi Coralului", chain: "Profi", city: "Bragadiru", county: "Ilfov", address: "Str. Coralului 4, Bragadiru", lat: 44.3755, lng: 26.0095, order: 9 },
+        { id: "d5_10", name: "Profi Mărgeanului 62", chain: "Profi", city: "Sector 5", county: "București", address: "Str. Mărgeanului 62, Sector 5", lat: 44.4035, lng: 26.0595, order: 10 },
+        { id: "d5_11", name: "Profi Mărgeanului 16", chain: "Profi", city: "Sector 5", county: "București", address: "Str. Mărgeanului 16, Sector 5", lat: 44.4065, lng: 26.0685, order: 11 },
+        { id: "d5_12", name: "Profi Mărgeanului", chain: "Profi", city: "Sector 5", county: "București", address: "Str. Mărgeanului 12, Sector 5", lat: 44.4070, lng: 26.0695, order: 12 },
+        { id: "d5_13", name: "Profi Bârcă", chain: "Profi", city: "Sector 5", county: "București", address: "Str. Bârcă 2, Sector 5", lat: 44.4105, lng: 26.0650, order: 13 },
+        { id: "d5_14", name: "Profi Sălaj", chain: "Profi", city: "Sector 5", county: "București", address: "Șos. Sălaj 133, Sector 5", lat: 44.4030, lng: 26.0790, order: 14 },
+        { id: "d5_15", name: "Profi Ferentari", chain: "Profi", city: "Sector 5", county: "București", address: "Calea Ferentari 20, Sector 5", lat: 44.4080, lng: 26.0890, order: 15 },
+        { id: "d5_16", name: "Profi Rahova", chain: "Profi", city: "Sector 5", county: "București", address: "Calea Rahovei 22, Sector 5", lat: 44.4185, lng: 26.0875, order: 16 },
+        { id: "d5_17", name: "Profi Ion Urdăreanu", chain: "Profi", city: "Sector 5", county: "București", address: "Str. Ion Urdăreanu 7, Sector 5", lat: 44.4235, lng: 26.0745, order: 17 },
+        { id: "d5_18", name: "Profi 13 Septembrie", chain: "Profi", city: "Sector 5", county: "București", address: "Calea 13 Septembrie 111, Sector 5", lat: 44.4245, lng: 26.0795, order: 18 },
+        { id: "d5_19", name: "Profi Libertății", chain: "Profi", city: "Sector 5", county: "București", address: "B-dul Libertății 2, Sector 5", lat: 44.4278, lng: 26.0915, order: 19 }
+      ]
+    };
 
     class MerchandiserApp {
       constructor() {
+        this.currentWeek = "week1";
         this.currentDay = localStorage.getItem("merch_active_day") || "day1";
         this.stores = [];
         this.activeStoreId = null;
@@ -1742,6 +1712,7 @@
         this.map = null;
         this.markers = {};
         this.routePolyline = null;
+        this.tileLayers = {};
         this.userGpsMarker = null;
         this.userGpsCircle = null;
         this.userGpsWatchId = null;
@@ -1749,11 +1720,10 @@
         this.deviceMode = localStorage.getItem("merch_device_mode") || null;
         this.theme = localStorage.getItem("merch_theme") || "light";
         
-        // Data per day
+        // Dynamic product data per day: { [storeId]: { sectionName: string, items: [ { id, name, price, photoUrl } ] } }
+        this.storeProductsData = {};
         this.storeLogs = {};
-        this.priceEntries = [];
-        this.storePhotos = {};
-        this.currentUploadSlot = "general";
+        this.activePhotoUploadTarget = null; // { storeId, productId }
       }
 
       init() {
@@ -1776,12 +1746,7 @@
         this.currentDay = dayKey;
         localStorage.setItem("merch_active_day", dayKey);
 
-        let initialList = STORES_DAY_1;
-        if (dayKey === "day2") initialList = STORES_DAY_2;
-        if (dayKey === "day3") initialList = STORES_DAY_3;
-        if (dayKey === "day4") initialList = STORES_DAY_4;
-        if (dayKey === "day5") initialList = STORES_DAY_5;
-
+        const initialList = INITIAL_DATA_WEEK_1[dayKey] || INITIAL_DATA_WEEK_1.day1;
         const savedStores = localStorage.getItem(`merch_stores_${dayKey}`);
         if (savedStores) {
           try {
@@ -1795,8 +1760,7 @@
         }
 
         this.storeLogs = JSON.parse(localStorage.getItem(`merch_logs_${dayKey}`) || "{}");
-        this.priceEntries = JSON.parse(localStorage.getItem(`merch_prices_${dayKey}`) || "[]");
-        this.storePhotos = JSON.parse(localStorage.getItem(`merch_photos_${dayKey}`) || "{}");
+        this.storeProductsData = JSON.parse(localStorage.getItem(`merch_products_v2_${dayKey}`) || "{}");
       }
 
       saveStores() {
@@ -1807,15 +1771,11 @@
         localStorage.setItem(`merch_logs_${this.currentDay}`, JSON.stringify(this.storeLogs));
       }
 
-      savePrices() {
-        localStorage.setItem(`merch_prices_${this.currentDay}`, JSON.stringify(this.priceEntries));
-      }
-
-      savePhotos() {
+      saveProductsData() {
         try {
-          localStorage.setItem(`merch_photos_${this.currentDay}`, JSON.stringify(this.storePhotos));
+          localStorage.setItem(`merch_products_v2_${this.currentDay}`, JSON.stringify(this.storeProductsData));
         } catch(e) {
-          console.warn("Storage quota exceeded, kept in memory.");
+          console.warn("Storage quota warning, keeping in memory.");
         }
       }
 
@@ -1836,11 +1796,10 @@
 
       updateDayUI() {
         const d = this.currentDay;
-        document.getElementById("btnDay1").classList.toggle("active", d === "day1");
-        document.getElementById("btnDay2").classList.toggle("active", d === "day2");
-        document.getElementById("btnDay3").classList.toggle("active", d === "day3");
-        document.getElementById("btnDay4").classList.toggle("active", d === "day4");
-        document.getElementById("btnDay5").classList.toggle("active", d === "day5");
+        ["day1", "day2", "day3", "day4", "day5"].forEach(k => {
+          const btn = document.getElementById(`btn${k.charAt(0).toUpperCase() + k.slice(1)}`);
+          if (btn) btn.classList.toggle("active", d === k);
+        });
 
         const originLabel = document.getElementById("routeOriginStatus");
         const sidebarTitle = document.getElementById("sidebarTitle");
@@ -1849,65 +1808,50 @@
         const repSub = document.getElementById("reportSubHeading");
 
         if (d === "day1") {
-          originLabel.textContent = "Start: Brănești (A2) → Sector 4 & Popești";
-          sidebarTitle.textContent = "Magazine Ziua 1 (20)";
+          originLabel.textContent = "Săptămâna 1 | Start: Brănești (A2) → Sector 4 & Popești";
+          sidebarTitle.textContent = "Săptămâna 1 - Ziua 1 (20 Magazine)";
           sidebarDesc.innerHTML = `
             <div>🛣️ <strong>Ruta Optimizată:</strong> Plecare din <strong>Brănești pe A2</strong>, vizitare Popești $\rightarrow$ Sector 4 și final la <strong>Penny Timpuri Noi</strong> (retur facil pe Splai / Pallady / A2).</div>
-            <div class="route-stats-row">
-              <span>Distanță: ~19.2 km</span>
-              <span>Timp condus: ~40-50 min</span>
-            </div>
+            <div class="route-stats-row"><span>Distanță: ~19.2 km</span><span>Timp condus: ~40-50 min</span></div>
           `;
-          repHeading.textContent = "📋 Raport Verificare Teren - Ziua 1 (Sector 4 & Popești)";
-          repSub.textContent = "Monitorizare status vizite, prețuri la raft și fotografii pentru cele 20 de magazine.";
+          repHeading.textContent = "📋 Raport Verificare Teren - Săptămâna 1 / Ziua 1";
+          repSub.textContent = "Monitorizare status vizite, produse, prețuri și fotografii pentru cele 20 de magazine.";
         } else if (d === "day2") {
-          originLabel.textContent = "Start: Brănești (A2) → Ilfov Sud-Vest & Sector 5";
-          sidebarTitle.textContent = "Magazine Ziua 2 (19)";
+          originLabel.textContent = "Săptămâna 1 | Start: Brănești (A2) → Ilfov Sud-Vest & Sector 5";
+          sidebarTitle.textContent = "Săptămâna 1 - Ziua 2 (19 Magazine)";
           sidebarDesc.innerHTML = `
             <div>🛣️ <strong>Ruta Optimizată:</strong> Plecare din <strong>Brănești pe A2</strong>, vizitare Comuna Berceni $\rightarrow$ Vidra $\rightarrow$ Jilava $\rightarrow$ Măgurele $\rightarrow$ Bragadiru $\rightarrow$ Sector 5 și final la <strong>Mega Image Regina Maria</strong> (retur facil pe B-dul Unirii / Pallady / A2).</div>
-            <div class="route-stats-row">
-              <span>Distanță: ~40.3 km</span>
-              <span>Timp condus: ~60-75 min</span>
-            </div>
+            <div class="route-stats-row"><span>Distanță: ~40.3 km</span><span>Timp condus: ~60-75 min</span></div>
           `;
-          repHeading.textContent = "📋 Raport Verificare Teren - Ziua 2 (Ilfov Sud-Vest & Sector 5)";
-          repSub.textContent = "Monitorizare status vizite, prețuri la raft și fotografii pentru cele 19 magazine.";
+          repHeading.textContent = "📋 Raport Verificare Teren - Săptămâna 1 / Ziua 2";
+          repSub.textContent = "Monitorizare status vizite, produse, prețuri și fotografii pentru cele 19 magazine.";
         } else if (d === "day3") {
-          originLabel.textContent = "Start: Brănești (A2) → Chitila / Chiajna / Domnești / Sector 6";
-          sidebarTitle.textContent = "Magazine Ziua 3 (20)";
+          originLabel.textContent = "Săptămâna 1 | Start: Brănești (A2) → Chitila / Chiajna / Domnești / Sector 6";
+          sidebarTitle.textContent = "Săptămâna 1 - Ziua 3 (20 Magazine)";
           sidebarDesc.innerHTML = `
             <div>🛣️ <strong>Ruta Optimizată:</strong> Plecare din <strong>Brănești pe A2 / Centura Nord</strong>, vizitare Chitila $\rightarrow$ Chiajna $\rightarrow$ Ciorogârla $\rightarrow$ Domnești $\rightarrow$ Sector 6 și final la <strong>Profi Brașov</strong> (retur facil pe Răzoare / Splai / A2).</div>
-            <div class="route-stats-row">
-              <span>Distanță: ~44.4 km</span>
-              <span>Timp condus: ~65-80 min</span>
-            </div>
+            <div class="route-stats-row"><span>Distanță: ~44.4 km</span><span>Timp condus: ~65-80 min</span></div>
           `;
-          repHeading.textContent = "📋 Raport Verificare Teren - Ziua 3 (Chitila, Chiajna, Domnești & Sector 6)";
-          repSub.textContent = "Monitorizare status vizite, prețuri la raft și fotografii pentru cele 20 de magazine.";
+          repHeading.textContent = "📋 Raport Verificare Teren - Săptămâna 1 / Ziua 3";
+          repSub.textContent = "Monitorizare status vizite, produse, prețuri și fotografii pentru cele 20 de magazine.";
         } else if (d === "day4") {
-          originLabel.textContent = "Start: Brănești (A2) → Giulești / Crângași / Militari / Drumul Taberei";
-          sidebarTitle.textContent = "Magazine Ziua 4 (14)";
+          originLabel.textContent = "Săptămâna 1 | Start: Brănești (A2) → Giulești / Crângași / Militari / Drumul Taberei";
+          sidebarTitle.textContent = "Săptămâna 1 - Ziua 4 (14 Magazine)";
           sidebarDesc.innerHTML = `
-            <div>🛣️ <strong>Ruta Optimizată:</strong> Plecare din <strong>Brănești pe A2</strong>, vizitare Giulești $\rightarrow$ Crângași $\rightarrow$ Militari (Uverturii/Apusului/Păcii) $\rightarrow$ Drumul Taberei și final la <strong>Mega Image Timișoara 18</strong> (retur facil pe Răzoare / Unirii / Pallady / A2).</div>
-            <div class="route-stats-row">
-              <span>Distanță: ~17.2 km</span>
-              <span>Timp condus: ~35-45 min</span>
-            </div>
+            <div>🛣️ <strong>Ruta Optimizată:</strong> Plecare din <strong>Brănești pe A2</strong>, vizitare Giulești $\rightarrow$ Crângași $\rightarrow$ Militari $\rightarrow$ Drumul Taberei și final la <strong>Mega Image Timișoara 18</strong> (retur facil pe Răzoare / Unirii / Pallady / A2).</div>
+            <div class="route-stats-row"><span>Distanță: ~17.2 km</span><span>Timp condus: ~35-45 min</span></div>
           `;
-          repHeading.textContent = "📋 Raport Verificare Teren - Ziua 4 (Sector 6)";
-          repSub.textContent = "Monitorizare status vizite, prețuri la raft și fotografii pentru cele 14 magazine.";
+          repHeading.textContent = "📋 Raport Verificare Teren - Săptămâna 1 / Ziua 4";
+          repSub.textContent = "Monitorizare status vizite, produse, prețuri și fotografii pentru cele 14 magazine.";
         } else {
-          originLabel.textContent = "Start: Brănești (A2) → Chiajna / Bragadiru / Sector 5";
-          sidebarTitle.textContent = "Magazine Ziua 5 (19)";
+          originLabel.textContent = "Săptămâna 1 | Start: Brănești (A2) → Chiajna / Bragadiru / Sector 5";
+          sidebarTitle.textContent = "Săptămâna 1 - Ziua 5 (19 Magazine)";
           sidebarDesc.innerHTML = `
-            <div>🛣️ <strong>Ruta Optimizată:</strong> Plecare din <strong>Brănești pe A2 / DNCB Nord</strong>, vizitare Chiajna $\rightarrow$ Bragadiru $\rightarrow$ Rahova/Mărgeanului $\rightarrow$ 13 Septembrie și final la <strong>Profi Libertății</strong> (retur facil pe Piața Constituției / B-dul Unirii / Splai / A2).</div>
-            <div class="route-stats-row">
-              <span>Distanță: ~22.8 km</span>
-              <span>Timp condus: ~45-55 min</span>
-            </div>
+            <div>🛣️ <strong>Ruta Optimizată:</strong> Plecare din <strong>Brănești pe A2 / DNCB Nord</strong>, vizitare Chiajna $\rightarrow$ Bragadiru $\rightarrow$ Rahova/Mărgeanului $\rightarrow$ 13 Septembrie și final la <strong>Profi Libertății</strong> (retur facil pe B-dul Libertății / Unirii / Splai / A2).</div>
+            <div class="route-stats-row"><span>Distanță: ~22.8 km</span><span>Timp condus: ~45-55 min</span></div>
           `;
-          repHeading.textContent = "📋 Raport Verificare Teren - Ziua 5 (Chiajna, Bragadiru & Sector 5)";
-          repSub.textContent = "Monitorizare status vizite, prețuri la raft și fotografii pentru cele 19 magazine.";
+          repHeading.textContent = "📋 Raport Verificare Teren - Săptămâna 1 / Ziua 5";
+          repSub.textContent = "Monitorizare status vizite, produse, prețuri și fotografii pentru cele 19 magazine.";
         }
       }
 
@@ -1971,15 +1915,41 @@
         }
       }
 
-      /* MAP & LEAFLET SETUP */
+      /* GOOGLE MAPS TILE INTEGRATION & LEAFLET SETUP */
       initMap() {
-        this.map = L.map('map', { zoomControl: false }).setView([44.420, 26.040], 12);
+        // Google Maps Layers (No API key needed, high resolution Satellite & Streets)
+        const googleHybrid = L.tileLayer('https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+          maxZoom: 20,
+          subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+          attribution: '&copy; Google Maps (Satelit + Străzi)'
+        });
+
+        const googleStreets = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+          maxZoom: 20,
+          subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+          attribution: '&copy; Google Maps (Străzi)'
+        });
+
+        const osmStandard = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; OpenStreetMap contributors'
+        });
+
+        // Initialize with Google Hybrid as default
+        this.map = L.map('map', { 
+          zoomControl: false,
+          layers: [googleHybrid] 
+        }).setView([44.420, 26.040], 12);
+
         L.control.zoom({ position: 'topright' }).addTo(this.map);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; OpenStreetMap contributors',
-          maxZoom: 19
-        }).addTo(this.map);
+        // Map layer switcher (Google Maps Satellite / Google Maps Streets / OSM)
+        const baseMaps = {
+          "🛰️ Google Maps Hibrid (Satelit)": googleHybrid,
+          "🗺️ Google Maps Străzi": googleStreets,
+          "🌍 OpenStreetMap": osmStandard
+        };
+        L.control.layers(baseMaps, null, { position: 'topright' }).addTo(this.map);
 
         this.renderMapMarkers();
         this.drawRoutePolyline();
@@ -1995,7 +1965,7 @@
         } else if (log && log.status === "unresolved") {
           colorClass = "pin-unresolved"; // Red
         } else if (isActive) {
-          colorClass = "pin-active-pending"; // Blue when selected and not yet marked
+          colorClass = "pin-active-pending"; // Blue when selected
         }
 
         const activeClass = isActive ? "is-active" : "";
@@ -2008,6 +1978,7 @@
         });
       }
 
+      /* RENDER PINS WITH DRAG & DROP COORD FIXING */
       renderMapMarkers() {
         Object.values(this.markers).forEach(m => this.map.removeLayer(m));
         this.markers = {};
@@ -2017,14 +1988,56 @@
         filtered.forEach((store) => {
           const originalIndex = this.stores.findIndex(s => s.id === store.id);
           const icon = this.createPinIcon(store, originalIndex);
-          const marker = L.marker([store.lat, store.lng], { icon: icon }).addTo(this.map);
+          
+          // DRAGGABLE MARKER: Allows user to move and permanently fix pin on map!
+          const marker = L.marker([store.lat, store.lng], { 
+            icon: icon,
+            draggable: true 
+          }).addTo(this.map);
+
+          // Click opens store details
           marker.on('click', () => this.setActiveStore(store.id, true));
+
+          // Dragend saves exact new coordinates to localStorage!
+          marker.on('dragend', (e) => {
+            const newPos = e.target.getLatLng();
+            store.lat = parseFloat(newPos.lat.toFixed(6));
+            store.lng = parseFloat(newPos.lng.toFixed(6));
+            this.saveStores();
+            this.drawRoutePolyline();
+            this.showDragToast(`📍 Poziția magazinului "${store.name}" a fost actualizată și fixată!`);
+          });
+
           this.markers[store.id] = marker;
         });
 
         if (filtered.length > 0) {
           const group = new L.featureGroup(Object.values(this.markers));
           this.map.fitBounds(group.getBounds().pad(0.1));
+        }
+      }
+
+      showDragToast(msg) {
+        const toast = document.getElementById("mapDragToast");
+        const toastText = document.getElementById("mapDragToastText");
+        if (!toast) return;
+        toastText.textContent = msg;
+        toast.style.display = "flex";
+        setTimeout(() => { toast.style.display = "none"; }, 3500);
+      }
+
+      resetStoreCoordinates(storeId) {
+        const initialList = INITIAL_DATA_WEEK_1[this.currentDay] || [];
+        const canonical = initialList.find(s => s.id === storeId);
+        const current = this.stores.find(s => s.id === storeId);
+        if (canonical && current) {
+          current.lat = canonical.lat;
+          current.lng = canonical.lng;
+          this.saveStores();
+          this.renderMapMarkers();
+          this.drawRoutePolyline();
+          this.setActiveStore(storeId, false);
+          alert(`✓ Pinul magazinului "${current.name}" a fost readus la coordonatele inițiale.`);
         }
       }
 
@@ -2106,8 +2119,7 @@
 
         const fabSelect = document.getElementById("fabStoreSelect");
         if (fabSelect) fabSelect.value = id;
-        this.renderFabEntriesList();
-        this.updateBeforeAfterPreviews();
+        this.renderFabProductsForm();
 
         if (openSheet && (this.deviceMode === "mobile" || window.innerWidth < 768)) {
           this.openStoreModal(store, index, log);
@@ -2287,7 +2299,6 @@
           dragDistance = 0;
           const clientX = e.touches ? e.touches[0].clientX : e.clientX;
           const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-          
           startX = clientX;
           startY = clientY;
 
@@ -2305,7 +2316,6 @@
           e.preventDefault();
           const clientX = e.touches ? e.touches[0].clientX : e.clientX;
           const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
           const deltaX = clientX - startX;
           const deltaY = clientY - startY;
           dragDistance = Math.hypot(deltaX, deltaY);
@@ -2428,16 +2438,11 @@
 
       /* ROUTE RE-ORDERING */
       reorderRoute(strategy) {
-        let canonical = STORES_DAY_1;
-        if (this.currentDay === "day2") canonical = STORES_DAY_2;
-        if (this.currentDay === "day3") canonical = STORES_DAY_3;
-        if (this.currentDay === "day4") canonical = STORES_DAY_4;
-        if (this.currentDay === "day5") canonical = STORES_DAY_5;
-
+        const initialList = INITIAL_DATA_WEEK_1[this.currentDay] || [];
         if (strategy === "tur") {
-          this.stores = [...canonical];
+          this.stores = [...initialList];
         } else if (strategy === "retur") {
-          this.stores = [...canonical].reverse().map((s, idx) => ({ ...s, order: idx + 1 }));
+          this.stores = [...initialList].reverse().map((s, idx) => ({ ...s, order: idx + 1 }));
         }
         this.saveStores();
         this.renderSidebarList();
@@ -2491,7 +2496,7 @@
         if (badge) badge.textContent = `${totalResolved}/${this.stores.length} Vizitate`;
       }
 
-      /* FLOATING ACTION BUBBLE & SMART IMAGE COMPRESSION */
+      /* DYNAMIC PRODUCTS LIST & PHOTO FORM (NEW SIMPLIFIED CRUD) */
       toggleFabWindow() {
         const win = document.getElementById("fabWindow");
         win.classList.toggle("active");
@@ -2500,8 +2505,7 @@
           if (this.activeStoreId) {
             document.getElementById("fabStoreSelect").value = this.activeStoreId;
           }
-          this.renderFabEntriesList();
-          this.updateBeforeAfterPreviews();
+          this.renderFabProductsForm();
         }
       }
 
@@ -2515,8 +2519,7 @@
         win.classList.add("active");
         this.populateFabDropdown();
         document.getElementById("fabStoreSelect").value = storeId;
-        this.renderFabEntriesList();
-        this.updateBeforeAfterPreviews();
+        this.renderFabProductsForm();
       }
 
       populateFabDropdown() {
@@ -2534,16 +2537,133 @@
       onFabStoreChange() {
         const selId = document.getElementById("fabStoreSelect").value;
         this.setActiveStore(selId, false);
-        this.renderFabEntriesList();
-        this.updateBeforeAfterPreviews();
+        this.renderFabProductsForm();
       }
 
-      triggerPhotoUpload(slot) {
-        this.currentUploadSlot = slot;
-        document.getElementById("fabPhotoInput").click();
+      getOrCreateStoreData(storeId) {
+        if (!this.storeProductsData[storeId]) {
+          this.storeProductsData[storeId] = {
+            sectionName: "Raft Principal",
+            items: [
+              { id: "p_" + Date.now() + "_1", name: "", price: "", photoUrl: "" }
+            ]
+          };
+        }
+        return this.storeProductsData[storeId];
       }
 
-      compressImageFile(file, maxWidth = 850, quality = 0.75) {
+      onSectionNameChange() {
+        const storeId = document.getElementById("fabStoreSelect").value || this.activeStoreId;
+        const data = this.getOrCreateStoreData(storeId);
+        data.sectionName = document.getElementById("fabSectionName").value;
+        this.saveProductsData();
+        this.renderReport();
+      }
+
+      renderFabProductsForm() {
+        const storeId = document.getElementById("fabStoreSelect").value || this.activeStoreId;
+        const data = this.getOrCreateStoreData(storeId);
+
+        document.getElementById("fabSectionName").value = data.sectionName || "";
+        const listContainer = document.getElementById("fabProductsList");
+        listContainer.innerHTML = "";
+
+        data.items.forEach((item, idx) => {
+          const row = document.createElement("div");
+          row.className = "product-row-item";
+          row.dataset.id = item.id;
+
+          const photoHtml = item.photoUrl 
+            ? `<img src="${item.photoUrl}" onclick="event.stopPropagation(); app.zoomPhoto('${item.photoUrl}')" />` 
+            : `<span class="thumb-placeholder">📷</span>`;
+
+          row.innerHTML = `
+            <div class="product-index-badge">${idx + 1}</div>
+            
+            <div class="product-thumb-container" onclick="app.triggerProductPhotoUpload('${storeId}', '${item.id}')" title="Fă o poză sau alege din galerie">
+              ${photoHtml}
+            </div>
+
+            <div class="product-fields-col">
+              <input type="text" class="product-input-name" placeholder="Denumire Produs (ex: Coca-Cola 2L)" value="${item.name || ''}" oninput="app.updateProductField('${storeId}', '${item.id}', 'name', this.value)" />
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <input type="number" step="0.01" class="product-input-price" placeholder="Preț (RON)" value="${item.price || ''}" oninput="app.updateProductField('${storeId}', '${item.id}', 'price', this.value)" />
+                <span style="font-size: 11px; font-weight: 700; color: var(--text-muted);">RON</span>
+              </div>
+            </div>
+
+            <div class="product-actions-col">
+              <button class="action-icon-btn" title="Mută mai sus" onclick="app.moveProductRow('${storeId}', ${idx}, -1)">⬆️</button>
+              <button class="action-icon-btn" title="Mută mai jos" onclick="app.moveProductRow('${storeId}', ${idx}, 1)">⬇️</button>
+              <button class="action-icon-btn delete-btn" title="Șterge produs" onclick="app.deleteProductRow('${storeId}', '${item.id}')">🗑️</button>
+            </div>
+          `;
+
+          listContainer.appendChild(row);
+        });
+
+        document.getElementById("fabProductCountLabel").textContent = `${data.items.length} produs(e)`;
+        this.updateTotalPhotosBadge();
+      }
+
+      addNewProductRow() {
+        const storeId = document.getElementById("fabStoreSelect").value || this.activeStoreId;
+        const data = this.getOrCreateStoreData(storeId);
+        data.items.push({
+          id: "p_" + Date.now() + "_" + Math.floor(Math.random()*1000),
+          name: "",
+          price: "",
+          photoUrl: ""
+        });
+        this.saveProductsData();
+        this.renderFabProductsForm();
+        this.renderReport();
+      }
+
+      updateProductField(storeId, itemId, field, value) {
+        const data = this.getOrCreateStoreData(storeId);
+        const item = data.items.find(it => it.id === itemId);
+        if (item) {
+          item[field] = value;
+          this.saveProductsData();
+          this.renderReport();
+        }
+      }
+
+      moveProductRow(storeId, fromIndex, direction) {
+        const data = this.getOrCreateStoreData(storeId);
+        const toIndex = fromIndex + direction;
+        if (toIndex < 0 || toIndex >= data.items.length) return;
+
+        const temp = data.items[fromIndex];
+        data.items[fromIndex] = data.items[toIndex];
+        data.items[toIndex] = temp;
+
+        this.saveProductsData();
+        this.renderFabProductsForm();
+        this.renderReport();
+      }
+
+      deleteProductRow(storeId, itemId) {
+        const data = this.getOrCreateStoreData(storeId);
+        if (data.items.length === 1 && !data.items[0].name && !data.items[0].photoUrl) {
+          return; // Keep at least one blank row
+        }
+        data.items = data.items.filter(it => it.id !== itemId);
+        if (data.items.length === 0) {
+          data.items.push({ id: "p_" + Date.now(), name: "", price: "", photoUrl: "" });
+        }
+        this.saveProductsData();
+        this.renderFabProductsForm();
+        this.renderReport();
+      }
+
+      triggerProductPhotoUpload(storeId, productId) {
+        this.activePhotoUploadTarget = { storeId, productId };
+        document.getElementById("fabProductPhotoInput").click();
+      }
+
+      compressImageFile(file, maxWidth = 800, quality = 0.75) {
         return new Promise((resolve) => {
           const reader = new FileReader();
           reader.onload = (e) => {
@@ -2577,65 +2697,36 @@
         });
       }
 
-      async handlePhotoFileSelected(event) {
+      async handleProductPhotoSelected(event) {
         const file = event.target.files[0];
-        if (!file) return;
+        if (!file || !this.activePhotoUploadTarget) return;
 
-        const storeId = document.getElementById("fabStoreSelect").value || this.activeStoreId;
-        if (!this.storePhotos[storeId]) {
-          this.storePhotos[storeId] = {};
+        const { storeId, productId } = this.activePhotoUploadTarget;
+        const compressedBase64 = await this.compressImageFile(file);
+
+        const data = this.getOrCreateStoreData(storeId);
+        const item = data.items.find(it => it.id === productId);
+        if (item) {
+          item.photoUrl = compressedBase64;
+          this.saveProductsData();
+          this.renderFabProductsForm();
+          this.renderReport();
         }
 
-        const compressedData = await this.compressImageFile(file);
-
-        if (this.currentUploadSlot === "before") {
-          this.storePhotos[storeId].before = compressedData;
-        } else if (this.currentUploadSlot === "after") {
-          this.storePhotos[storeId].after = compressedData;
-        }
-
-        this.savePhotos();
-        this.updateBeforeAfterPreviews();
-        this.renderReport();
         event.target.value = "";
       }
 
-      updateBeforeAfterPreviews() {
-        const storeId = document.getElementById("fabStoreSelect").value || this.activeStoreId;
-        const photos = this.storePhotos[storeId] || {};
-
-        const beforeCard = document.getElementById("slotBeforeCard");
-        const afterCard = document.getElementById("slotAfterCard");
-        const beforePrev = document.getElementById("slotBeforePreview");
-        const afterPrev = document.getElementById("slotAfterPreview");
-
-        if (photos.before) {
-          beforeCard.classList.add("has-photo");
-          beforePrev.innerHTML = `<img src="${photos.before}" class="photo-slot-img" onclick="event.stopPropagation(); app.zoomPhoto('${photos.before}')" /><div style="font-size:9px; color:var(--success); font-weight:700; margin-top:2px;">✓ Salvat (Apasă pt mărire)</div>`;
-        } else {
-          beforeCard.classList.remove("has-photo");
-          beforePrev.innerHTML = "";
-        }
-
-        if (photos.after) {
-          afterCard.classList.add("has-photo");
-          afterPrev.innerHTML = `<img src="${photos.after}" class="photo-slot-img" onclick="event.stopPropagation(); app.zoomPhoto('${photos.after}')" /><div style="font-size:9px; color:var(--success); font-weight:700; margin-top:2px;">✓ Salvat (Apasă pt mărire)</div>`;
-        } else {
-          afterCard.classList.remove("has-photo");
-          afterPrev.innerHTML = "";
-        }
-
-        const totalPhotos = Object.values(this.storePhotos).reduce((acc, obj) => {
-          let c = 0;
-          if (obj.before) c++;
-          if (obj.after) c++;
-          return acc + c;
-        }, 0);
-
+      updateTotalPhotosBadge() {
+        let count = 0;
+        Object.values(this.storeProductsData).forEach(data => {
+          if (data && data.items) {
+            data.items.forEach(it => { if (it.photoUrl) count++; });
+          }
+        });
         const badge = document.getElementById("fabPhotosBadge");
         if (badge) {
-          badge.style.display = totalPhotos > 0 ? "flex" : "none";
-          badge.textContent = totalPhotos;
+          badge.style.display = count > 0 ? "flex" : "none";
+          badge.textContent = count;
         }
       }
 
@@ -2644,97 +2735,6 @@
         const img = document.getElementById("zoomImg");
         img.src = src;
         modal.classList.add("active");
-      }
-
-      savePriceEntry() {
-        const storeId = document.getElementById("fabStoreSelect").value;
-        const category = document.getElementById("fabCategorySelect").value;
-        const productName = document.getElementById("fabProductName").value.trim();
-        const priceReg = parseFloat(document.getElementById("fabPriceRegular").value);
-        const pricePromo = parseFloat(document.getElementById("fabPricePromo").value) || null;
-        const facings = parseInt(document.getElementById("fabFacingsCount").value) || null;
-        const shelfPos = document.getElementById("fabShelfPosition").value;
-        const isOos = document.getElementById("fabOosSwitch").checked;
-        const notes = document.getElementById("fabNotes").value.trim();
-
-        if (!productName) {
-          alert("Te rugăm să introduci numele sau codul produsului!");
-          return;
-        }
-
-        const newEntry = {
-          id: "pe_" + Date.now(),
-          storeId: storeId,
-          category: category,
-          productName: productName,
-          priceRegular: isNaN(priceReg) ? 0 : priceReg,
-          pricePromo: pricePromo,
-          facings: facings,
-          shelfPos: shelfPos,
-          isOos: isOos,
-          notes: notes,
-          timestamp: Date.now()
-        };
-
-        this.priceEntries.push(newEntry);
-        this.savePrices();
-
-        document.getElementById("fabProductName").value = "";
-        document.getElementById("fabPriceRegular").value = "";
-        document.getElementById("fabPricePromo").value = "";
-        document.getElementById("fabFacingsCount").value = "";
-        document.getElementById("fabOosSwitch").checked = false;
-        document.getElementById("fabNotes").value = "";
-
-        this.renderFabEntriesList();
-        this.renderReport();
-        alert("✓ Intrare salvată cu succes!");
-      }
-
-      deletePriceEntry(entryId) {
-        if (confirm("Sigur dorești să ștergi această intrare de preț?")) {
-          this.priceEntries = this.priceEntries.filter(e => e.id !== entryId);
-          this.savePrices();
-          this.renderFabEntriesList();
-          this.renderReport();
-        }
-      }
-
-      renderFabEntriesList() {
-        const container = document.getElementById("fabLoggedEntriesList");
-        if (!container) return;
-        container.innerHTML = "";
-
-        const storeId = document.getElementById("fabStoreSelect").value || this.activeStoreId;
-        const entries = this.priceEntries.filter(e => e.storeId === storeId);
-
-        if (entries.length === 0) {
-          container.innerHTML = `<span style="color:var(--text-muted); font-size:11px;">Niciun produs adăugat la acest magazin.</span>`;
-          return;
-        }
-
-        entries.forEach(e => {
-          const row = document.createElement("div");
-          row.style.background = "var(--bg)";
-          row.style.padding = "6px 8px";
-          row.style.borderRadius = "6px";
-          row.style.display = "flex";
-          row.style.justifyContent = "space-between";
-          row.style.alignItems = "center";
-
-          row.innerHTML = `
-            <div>
-              <strong>${e.productName}</strong> <span style="color:var(--text-muted);">(${e.category})</span><br/>
-              <span style="color:var(--primary); font-weight:700;">${e.priceRegular.toFixed(2)} RON</span>
-              ${e.pricePromo ? `<span style="color:var(--danger); font-size:11px; margin-left:4px;">(Promo: ${e.pricePromo.toFixed(2)} RON)</span>` : ''}
-              ${e.isOos ? `<span class="badge badge-danger" style="margin-left:4px;">OOS / Fără Stoc</span>` : ''}
-              ${e.facings ? `<span style="font-size:11px; color:var(--text-muted); margin-left:4px;">| ${e.facings} Fețe (${e.shelfPos})</span>` : ''}
-              ${e.notes ? `<div style="font-size:10px; color:var(--text-muted);">${e.notes}</div>` : ''}
-            </div>
-            <button class="btn btn-secondary btn-sm" style="min-height:28px; padding:2px 6px; color:var(--danger);" onclick="app.deletePriceEntry('${e.id}')">🗑️</button>
-          `;
-          container.appendChild(row);
-        });
       }
 
       /* RAPORT VERIFICARE TEREN TAB */
@@ -2750,41 +2750,39 @@
 
         this.stores.forEach((store, idx) => {
           const log = this.storeLogs[store.id];
-          const entries = this.priceEntries.filter(e => e.storeId === store.id);
-          const photos = this.storePhotos[store.id] || {};
+          const data = this.storeProductsData[store.id] || { sectionName: "-", items: [] };
 
           let statusText = `<span class="badge badge-gray">Neînceput</span>`;
           let timeText = "-";
-          let noteText = "-";
 
           if (log) {
             if (log.status === "completed") {
               resolved++;
               statusText = `<span class="badge badge-success">✓ Rezolvat</span>`;
               timeText = log.time || "-";
-              noteText = "Vizită finalizată cu succes";
             } else if (log.status === "unresolved") {
               unresolved++;
               statusText = `<span class="badge badge-danger">✕ Nerezolvat</span>`;
               timeText = log.time || "-";
-              noteText = `<span style="color:var(--danger); font-weight:600;">${log.reason || 'Problemă teren'}</span>`;
             }
           } else {
             pending++;
           }
 
-          let pricesSummary = "-";
-          if (entries.length > 0) {
-            pricesSummary = entries.map(e => `<strong>${e.productName}</strong>: ${e.priceRegular.toFixed(2)} RON ${e.pricePromo ? `(Promo ${e.pricePromo.toFixed(2)})` : ''} ${e.isOos ? '<span style="color:red; font-weight:bold;">[OOS]</span>' : ''} ${e.facings ? `[${e.facings} Fețe]` : ''}`).join("<br/>");
-          }
-
-          let photosSummary = "-";
-          let photoThumbs = [];
-          if (photos.before) photoThumbs.push(`<div style="text-align:center;"><img src="${photos.before}" style="width:36px; height:36px; object-fit:cover; border-radius:4px; cursor:pointer;" onclick="app.zoomPhoto('${photos.before}')" /><div style="font-size:8px; font-weight:700;">Înainte</div></div>`);
-          if (photos.after) photoThumbs.push(`<div style="text-align:center;"><img src="${photos.after}" style="width:36px; height:36px; object-fit:cover; border-radius:4px; cursor:pointer;" onclick="app.zoomPhoto('${photos.after}')" /><div style="font-size:8px; font-weight:700; color:var(--success);">După</div></div>`);
-
-          if (photoThumbs.length > 0) {
-            photosSummary = `<div style="display:flex; gap:6px;">${photoThumbs.join("")}</div>`;
+          // Format items list
+          let productsHtml = "-";
+          const validItems = data.items.filter(it => it.name || it.price || it.photoUrl);
+          if (validItems.length > 0) {
+            productsHtml = `<div style="display:flex; flex-direction:column; gap:6px;">` + validItems.map((it, i) => `
+              <div style="display:flex; align-items:center; gap:8px; background:var(--gray-50); padding:4px 8px; border-radius:6px;">
+                <span style="font-weight:800; color:var(--primary); font-size:11px;">#${i+1}</span>
+                ${it.photoUrl ? `<img src="${it.photoUrl}" style="width:32px; height:32px; object-fit:cover; border-radius:4px; cursor:pointer;" onclick="app.zoomPhoto('${it.photoUrl}')" />` : ''}
+                <div style="flex:1;">
+                  <strong>${it.name || 'Produs fără nume'}</strong>
+                  ${it.price ? `<span style="color:var(--success); font-weight:700; margin-left:6px;">${it.price} RON</span>` : ''}
+                </div>
+              </div>
+            `).join("") + `</div>`;
           }
 
           const tr = document.createElement("tr");
@@ -2796,9 +2794,8 @@
             </td>
             <td>${timeText}</td>
             <td>${statusText}</td>
-            <td>${noteText}</td>
-            <td>${pricesSummary}</td>
-            <td>${photosSummary}</td>
+            <td><strong>${data.sectionName || '-'}</strong></td>
+            <td>${productsHtml}</td>
           `;
           tbody.appendChild(tr);
         });
@@ -2811,13 +2808,10 @@
 
       copyWhatsAppReport() {
         const dateStr = new Date().toLocaleDateString('ro-RO');
-        let dayLabel = "ZIUA 1 (Sector 4 & Popești)";
-        if (this.currentDay === "day2") dayLabel = "ZIUA 2 (Ilfov Sud-Vest & Sector 5)";
-        if (this.currentDay === "day3") dayLabel = "ZIUA 3 (Chitila / Chiajna / Domnești & Sector 6)";
-        if (this.currentDay === "day4") dayLabel = "ZIUA 4 (Sector 6 - Giulești / Crângași / Militari / Drumul Taberei)";
-        if (this.currentDay === "day5") dayLabel = "ZIUA 5 (Chiajna / Bragadiru / Sector 5)";
+        const dayMap = { day1: "Ziua 1", day2: "Ziua 2", day3: "Ziua 3", day4: "Ziua 4", day5: "Ziua 5" };
+        const dayLabel = `SĂPTĂMÂNA 1 - ${dayMap[this.currentDay] || this.currentDay.toUpperCase()}`;
 
-        let text = `📊 *RAPORT MERCHANDISER TEREN - ${dayLabel}*\n`;
+        let text = `📊 *RAPORT MERCHANDISER - ${dayLabel}*\n`;
         text += `📅 Data: ${dateStr}\n`;
         text += `🚗 Traseu: Plecare din Brănești (A2)\n\n`;
 
@@ -2826,8 +2820,8 @@
 
         this.stores.forEach((store, idx) => {
           const log = this.storeLogs[store.id];
-          const entries = this.priceEntries.filter(e => e.storeId === store.id);
-          const photos = this.storePhotos[store.id] || {};
+          const data = this.storeProductsData[store.id] || { sectionName: "", items: [] };
+          const validItems = data.items.filter(it => it.name || it.price || it.photoUrl);
 
           if (log && log.status === "completed") {
             resolved++;
@@ -2839,13 +2833,14 @@
             text += `⏳ *${idx + 1}. ${store.name}* - În așteptare\n`;
           }
 
-          if (entries.length > 0) {
-            entries.forEach(e => {
-              text += `   🏷️ ${e.productName}: ${e.priceRegular.toFixed(2)} RON ${e.pricePromo ? `[PROMO: ${e.pricePromo.toFixed(2)} RON]` : ''} ${e.isOos ? '⚠️ [OUT OF STOCK]' : ''} ${e.facings ? `[${e.facings} Fețe]` : ''}\n`;
-            });
+          if (data.sectionName) {
+            text += `   📂 Secțiune: ${data.sectionName}\n`;
           }
-          if (photos.before || photos.after) {
-            text += `   📸 Foto: ${photos.before ? 'Înainte ✓' : ''} ${photos.after ? 'După ✓' : ''}\n`;
+
+          if (validItems.length > 0) {
+            validItems.forEach((it, i) => {
+              text += `   ${i+1}. ${it.name || 'Produs'} - ${it.price ? it.price + ' RON' : 'Fără preț'} ${it.photoUrl ? '📸 [Foto]' : ''}\n`;
+            });
           }
         });
 
@@ -2860,30 +2855,27 @@
 
       exportCSV() {
         const dayTag = this.currentDay.toUpperCase();
-        let csv = "\uFEFFNr,Magazin,Oras,Adresa,Ora Vizita,Status,Motiv / Observatii,Produse,Preturi,Out of Stock,Fete Raft,Foto Inainte,Foto Dupa\n";
+        let csv = "\uFEFFNr,Magazin,Oras,Adresa,Ora Vizita,Status,Sectiune,Produse Detaliate\n";
         
         this.stores.forEach((store, idx) => {
           const log = this.storeLogs[store.id] || {};
-          const entries = this.priceEntries.filter(e => e.storeId === store.id);
-          const photos = this.storePhotos[store.id] || {};
+          const data = this.storeProductsData[store.id] || { sectionName: "", items: [] };
+          const validItems = data.items.filter(it => it.name || it.price);
 
           let status = log.status === "completed" ? "Rezolvat" : (log.status === "unresolved" ? "Nerezolvat" : "Neinceput");
-          let reason = (log.reason || "").replace(/"/g, '""');
-          let products = entries.map(e => `${e.productName} (${e.priceRegular} RON)`).join(" | ").replace(/"/g, '""');
-          let hasOos = entries.some(e => e.isOos) ? "DA" : "NU";
-          let facings = entries.map(e => e.facings || 0).join(" | ");
+          let productsStr = validItems.map((it, i) => `${i+1}. ${it.name} (${it.price} RON)`).join(" | ").replace(/"/g, '""');
 
-          csv += `"${idx + 1}","${store.name}","${store.city}","${store.address}","${log.time || ''}","${status}","${reason}","${products}","${entries.length > 0 ? entries[0].priceRegular : ''}","${hasOos}","${facings}","${photos.before ? 'DA' : 'NU'}","${photos.after ? 'DA' : 'NU'}"\n`;
+          csv += `"${idx + 1}","${store.name}","${store.city}","${store.address}","${log.time || ''}","${status}","${data.sectionName || ''}","${productsStr}"\n`;
         });
 
         const blob = new Blob([csv.replace(/\\n/g, '\n')], { type: "text/csv;charset=utf-8;" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = `Raport_Merchandiser_${dayTag}_${new Date().toISOString().slice(0,10)}.csv`;
+        link.download = `Raport_Merchandiser_Saptamana1_${dayTag}_${new Date().toISOString().slice(0,10)}.csv`;
         link.click();
       }
 
-      /* BACKUP & RESTORE COMPLETE STATE FOR ALL 5 DAYS */
+      /* BACKUP & RESTORE COMPLETE STATE */
       openBackupModal() {
         document.getElementById("backupModalOverlay").classList.add("active");
       }
@@ -2894,36 +2886,31 @@
 
       exportFullBackup() {
         const backupData = {
-          version: "2.2",
+          version: "3.0_week1",
           exportDate: new Date().toISOString(),
           day1_stores: localStorage.getItem("merch_stores_day1"),
           day1_logs: localStorage.getItem("merch_logs_day1"),
-          day1_prices: localStorage.getItem("merch_prices_day1"),
-          day1_photos: localStorage.getItem("merch_photos_day1"),
+          day1_products: localStorage.getItem("merch_products_v2_day1"),
           day2_stores: localStorage.getItem("merch_stores_day2"),
           day2_logs: localStorage.getItem("merch_logs_day2"),
-          day2_prices: localStorage.getItem("merch_prices_day2"),
-          day2_photos: localStorage.getItem("merch_photos_day2"),
+          day2_products: localStorage.getItem("merch_products_v2_day2"),
           day3_stores: localStorage.getItem("merch_stores_day3"),
           day3_logs: localStorage.getItem("merch_logs_day3"),
-          day3_prices: localStorage.getItem("merch_prices_day3"),
-          day3_photos: localStorage.getItem("merch_photos_day3"),
+          day3_products: localStorage.getItem("merch_products_v2_day3"),
           day4_stores: localStorage.getItem("merch_stores_day4"),
           day4_logs: localStorage.getItem("merch_logs_day4"),
-          day4_prices: localStorage.getItem("merch_prices_day4"),
-          day4_photos: localStorage.getItem("merch_photos_day4"),
+          day4_products: localStorage.getItem("merch_products_v2_day4"),
           day5_stores: localStorage.getItem("merch_stores_day5"),
           day5_logs: localStorage.getItem("merch_logs_day5"),
-          day5_prices: localStorage.getItem("merch_prices_day5"),
-          day5_photos: localStorage.getItem("merch_photos_day5"),
+          day5_products: localStorage.getItem("merch_products_v2_day5"),
         };
 
         const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: "application/json" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = `Merchandiser_Backup_Total_5Zile_${new Date().toISOString().slice(0,10)}.json`;
+        link.download = `Merchandiser_Backup_Saptamana1_${new Date().toISOString().slice(0,10)}.json`;
         link.click();
-        alert("✓ Salvarea completă (Backup JSON pentru toate cele 5 zile) a fost descărcată cu succes!");
+        alert("✓ Salvarea completă (Backup JSON Săptămâna 1) a fost descărcată!");
       }
 
       importBackupFile(event) {
@@ -2934,53 +2921,34 @@
         reader.onload = (e) => {
           try {
             const data = JSON.parse(e.target.result);
-            if (data.day1_logs) localStorage.setItem("merch_logs_day1", data.day1_logs);
-            if (data.day1_prices) localStorage.setItem("merch_prices_day1", data.day1_prices);
-            if (data.day1_photos) localStorage.setItem("merch_photos_day1", data.day1_photos);
+            ["day1", "day2", "day3", "day4", "day5"].forEach(k => {
+              if (data[`${k}_stores`]) localStorage.setItem(`merch_stores_${k}`, data[`${k}_stores`]);
+              if (data[`${k}_logs`]) localStorage.setItem(`merch_logs_${k}`, data[`${k}_logs`]);
+              if (data[`${k}_products`]) localStorage.setItem(`merch_products_v2_${k}`, data[`${k}_products`]);
+            });
 
-            if (data.day2_logs) localStorage.setItem("merch_logs_day2", data.day2_logs);
-            if (data.day2_prices) localStorage.setItem("merch_prices_day2", data.day2_prices);
-            if (data.day2_photos) localStorage.setItem("merch_photos_day2", data.day2_photos);
-
-            if (data.day3_logs) localStorage.setItem("merch_logs_day3", data.day3_logs);
-            if (data.day3_prices) localStorage.setItem("merch_prices_day3", data.day3_prices);
-            if (data.day3_photos) localStorage.setItem("merch_photos_day3", data.day3_photos);
-
-            if (data.day4_logs) localStorage.setItem("merch_logs_day4", data.day4_logs);
-            if (data.day4_prices) localStorage.setItem("merch_prices_day4", data.day4_prices);
-            if (data.day4_photos) localStorage.setItem("merch_photos_day4", data.day4_photos);
-
-            if (data.day5_logs) localStorage.setItem("merch_logs_day5", data.day5_logs);
-            if (data.day5_prices) localStorage.setItem("merch_prices_day5", data.day5_prices);
-            if (data.day5_photos) localStorage.setItem("merch_photos_day5", data.day5_photos);
-
-            alert("✓ Toate datele și pozele pentru cele 5 zile au fost restaurate cu succes!");
+            alert("✓ Toate datele, coordonatele și pozele au fost restaurate cu succes!");
             location.reload();
           } catch(err) {
-            alert("Fișierul de backup este invalid sau corupt.");
+            alert("Fișierul de backup este invalid.");
           }
         };
         reader.readAsText(file);
       }
 
       resetDayProgress() {
-        let dayName = "Ziua 1";
-        if (this.currentDay === "day2") dayName = "Ziua 2";
-        if (this.currentDay === "day3") dayName = "Ziua 3";
-        if (this.currentDay === "day4") dayName = "Ziua 4";
-        if (this.currentDay === "day5") dayName = "Ziua 5";
+        const dayMap = { day1: "Ziua 1", day2: "Ziua 2", day3: "Ziua 3", day4: "Ziua 4", day5: "Ziua 5" };
+        const dayName = dayMap[this.currentDay] || "Ziua Curentă";
 
-        if (confirm(`⚠️ Ești sigur că vrei să resetezi statusul pentru ${dayName}? Toate vizitele și prețurile din această zi vor fi șterse pentru un nou început.`)) {
+        if (confirm(`⚠️ Ești sigur că vrei să resetezi statusul și produsele pentru Săptămâna 1 - ${dayName}?`)) {
           this.storeLogs = {};
-          this.priceEntries = [];
-          this.storePhotos = {};
+          this.storeProductsData = {};
           this.saveLogs();
-          this.savePrices();
-          this.savePhotos();
+          this.saveProductsData();
           this.renderSidebarList();
           this.renderMapMarkers();
           this.renderReport();
-          this.updateBeforeAfterPreviews();
+          this.renderFabProductsForm();
           this.setActiveStore(this.stores[0].id, false);
           alert(`✓ Progresul pentru ${dayName} a fost resetat cu succes!`);
         }
